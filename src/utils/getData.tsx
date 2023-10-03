@@ -31,32 +31,34 @@ export const getDesktopNavigation = (
   },
   {
     name: "Liked Videos",
-    path: userId ? `/playlist/LikedVideos` : "sign-in",
+    path: userId !== undefined ? `/playlist/LikedVideos` : "sign-in",
     icon: (className) => <ThumbsUp className={className} />,
   },
   {
     name: "History",
-    path: userId ? `/playlist/History` : "sign-in",
+    path: userId !== undefined ? `/playlist/History` : "sign-in",
     icon: (className) => <ClockRewind className={className} />,
   },
   {
     name: "Your Videos",
-    path: userId ? `/${String(userId)}/ProfileVideos` : "sign-in",
+    path: userId !== undefined ? `/${String(userId)}/ProfileVideos` : "sign-in",
     icon: (className) => <VideoRecorder className={className} />,
   },
   {
     name: "Library",
-    path: userId ? `/${String(userId)}/ProfilePlaylists` : "sign-in",
+    path:
+      userId !== undefined ? `/${String(userId)}/ProfilePlaylists` : "sign-in",
     icon: (className) => <Folder className={className} />,
   },
   {
     name: "Following",
-    path: userId ? `/${String(userId)}/ProfileFollowing` : "sign-in",
+    path:
+      userId !== undefined ? `/${String(userId)}/ProfileFollowing` : "sign-in",
     icon: (className) => <UserCheck className={className} />,
   },
   {
     name: "Settings",
-    path: userId ? `/Settings` : "sign-in",
+    path: userId !== undefined ? `/Settings` : "sign-in",
     icon: (className) => <Settings className={className} />,
   },
   {
@@ -69,7 +71,7 @@ export const getDesktopNavigation = (
 export const getMobileNavigation = (
   userId: string | undefined,
 ): NavigationItem[] => {
-  if (userId)
+  if (userId !== undefined)
     return [
       {
         name: "Profile",
@@ -108,6 +110,76 @@ export const getMobileNavigation = (
       name: "Feedback",
       path: `mailto:vidchill@vidchill.com`,
       icon: (className) => <MessagePlusSquare className={className} />,
+    },
+  ];
+};
+
+export const getHeaderNavigation = (
+  userId: string | undefined,
+): NavigationItem[] => {
+  if (userId !== undefined)
+    return [
+      {
+        icon: (className) => <User className={className} />,
+        name: "View Profile",
+        path: `/${String(userId)}/ProfileVideos`,
+      },
+      {
+        icon: (className) => <Brush className={className} />,
+        name: "Creator Studio",
+        path: `/Dashboard`,
+      },
+      {
+        icon: (className) => <HelpCircle className={className} />,
+        name: "Help",
+        path: `/Blog/Help`,
+      },
+      {
+        icon: (className) => <Settings className={className} />,
+        name: "Settings",
+        path: `/Settings`,
+      },
+      {
+        icon: (className) => <MessagePlusSquare className={className} />,
+        name: "Feedback",
+        path: `/`,
+      },
+      {
+        icon: (className) => <File className={className} />,
+        name: "Terms of Service",
+        path: `/Blog/TOS`,
+      },
+      {
+        icon: (className) => <Lock className={className} />,
+        name: "Privacy",
+        path: "/Blog/Privacy",
+      },
+      {
+        icon: (className) => <LogOut className={className} />,
+        name: "Log Out",
+        path: "sign-out",
+      },
+    ];
+  return [
+    {
+      icon: (className) => <HelpCircle className={className} />,
+      name: "Help",
+      path: `/Blog/Help`,
+    },
+    {
+      icon: (className) => <MessagePlusSquare className={className} />,
+      name: "Feedback",
+      path: `mailto:info@mytube.com`,
+    },
+    {
+      icon: (className) => <File className={className} />,
+      name: "Terms of Service",
+      path: "/Blog/TOS",
+    },
+    {
+      icon: (className) => <Lock className={className} />,
+      name: "Privacy",
+      path: "/Blog/Privacy",
     },
   ];
 };
