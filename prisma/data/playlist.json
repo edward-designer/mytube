@@ -1,0 +1,132 @@
+[
+  {
+    "id": "1",
+    "title": "Tech Today",
+    "description": "Keep up with the latest advancements in technology. From product reviews, to coding tutorials, to discussions about future technologies, this playlist will keep you at the cutting edge.",
+    "userId": "170",
+    "createdAt": "2021-03-14T13:14:15Z"
+  },
+
+  {
+    "id": "2",
+    "title": "World Travel Diaries",
+    "description": "Join us on a journey around the world through these captivating travel vlogs. Experience diverse cultures, beautiful landscapes, and hidden gems in every corner of the globe.",
+    "userId": "166",
+    "createdAt": "2021-02-02T10:22:00Z"
+  },
+
+  {
+    "id": "3",
+    "title": "Artistic Inspiration",
+    "description": "A collection of videos to inspire your inner artist. From painting and sculpting, to music and dance, to writing and photography, this playlist has something for everyone.",
+    "userId": "175",
+    "createdAt": "2021-03-14T13:14:15Z"
+  },
+
+  {
+    "id": "4",
+    "title": "World Literature",
+    "description": "Journey through the rich world of literature with reviews, author interviews, book recommendations and more from around the globe.",
+    "userId": "176",
+    "createdAt": "2021-01-22T16:00:00Z"
+  },
+
+  {
+    "id": "5",
+    "title": "Automobile Aficionado",
+    "description": "Get your engine running with reviews, overviews, and history of some of the world's best and most interesting vehicles.",
+    "userId": "164",
+    "createdAt": "2021-05-25T13:00:00Z"
+  },
+  {
+    "id": "6",
+    "title": "Science Fiction and Fantasy",
+    "description": "From Star Trek to Game of Thrones, explore the enchanting world of science fiction and fantasy through reviews, theories, and trivia.",
+    "userId": "165",
+    "createdAt": "2021-08-01T16:00:00Z"
+  },
+  {
+    "id": "7",
+    "title": "DIY Crafts and Projects",
+    "description": "Discover the joy of creating with your own hands. This playlist features a variety of DIY crafts and projects that you can do at home.",
+    "userId": "166",
+    "createdAt": "2021-02-09T14:00:00Z"
+  },
+  {
+    "id": "8",
+    "title": "Psychology Insights",
+    "description": "Learn about the fascinating workings of the human mind with videos covering various topics in psychology.",
+    "userId": "167",
+    "createdAt": "2021-07-20T13:00:00Z"
+  },
+  {
+    "id": "9",
+    "title": "Global News",
+    "description": "Stay informed with news updates and deep-dives into important events happening around the globe.",
+    "userId": "168",
+    "createdAt": "2021-05-15T16:00:00Z"
+  },
+  {
+    "id": "10",
+    "title": "Virtual Reality",
+    "description": "Explore the endless possibilities of VR. Includes game reviews, tech discussions, and virtual tours.",
+    "userId": "169",
+    "createdAt": "2021-06-29T17:00:00Z"
+  },
+  {
+    "id": "11",
+    "title": "Pet Care",
+    "description": "Videos focused on taking care of your pets, including tips for training, feeding, and understanding their behavior.",
+    "userId": "170",
+    "createdAt": "2021-04-05T13:00:00Z"
+  },
+  {
+    "id": "12",
+    "title": "Children's Educational Content",
+    "description": "A collection of kid-friendly educational videos on various subjects to make learning fun and engaging.",
+    "userId": "171",
+    "createdAt": "2021-09-02T10:00:00Z"
+  },
+  {
+    "id": "13",
+    "title": "Extreme Sports",
+    "description": "Experience the adrenaline rush of extreme sports with these thrilling videos featuring incredible feats and stunts.",
+    "userId": "172",
+    "createdAt": "2021-03-10T18:00:00Z"
+  },
+  {
+    "id": "14",
+    "title": "Personal Finance",
+    "description": "Guides, tips, and advice on managing your personal finance, including investing, saving, and budgeting.",
+    "userId": "173",
+    "createdAt": "2021-07-15T14:00:00Z"
+  },
+  {
+    "id": "15",
+    "title": "Mysteries of the Universe",
+    "description": "Delve into the fascinating mysteries of the universe, from unsolved puzzles in physics to the enigmatic nature of black holes and dark matter.",
+    "userId": "174",
+    "createdAt": "2021-08-10T15:00:00Z"
+  },
+  {
+    "id": "16",
+    "title": "Soothing Sounds for Sleep",
+    "description": "A collection of videos featuring relaxing sounds and music to help you achieve deep and restful sleep.",
+    "userId": "175",
+    "createdAt": "2021-05-20T20:00:00Z"
+  },
+  {
+    "id": "17",
+    "title": "Innovative Architecture",
+    "description": "Showcasing unique and innovative architecture from around the world, from skyscrapers to eco-friendly designs.",
+    "userId": "176",
+    "createdAt": "2021-06-25T17:00:00Z"
+  },
+  {
+    "id": "18",
+    "title": "Epic Journey of Art",
+    "description": "Journey through the world of art, exploring different styles, periods, artists, and their masterpieces.",
+    "userId": "177",
+    "createdAt": "2021-03-15T11:00:00Z"
+  }
+]
