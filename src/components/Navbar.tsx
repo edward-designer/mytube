@@ -18,7 +18,7 @@ interface NavbarProps {
 const Navbar = ({ children }: NavbarProps) => {
   return (
     <>
-      <div className=" fixed z-50 w-full border border-gray-200 bg-white shadow-sm">
+      <div className="relative z-50 w-full border border-gray-200 bg-white shadow-sm">
         <div className="mx-auto flex max-w-full px-6 lg:px-16 xl:grid xl:grid-cols-12">
           <div className="flex flex-shrink-0 items-center lg:static xl:col-span-2">
             <Link href="/" aria-label="home">
@@ -26,9 +26,11 @@ const Navbar = ({ children }: NavbarProps) => {
             </Link>
           </div>
           <div className="w-full min-w-0 flex-1 lg:px-0 xl:col-span-8">
-            <div className=" g:mx-0 flex items-center px-6 py-4 lg:max-w-none xl:mx-0 xl:px-0">
-              <div className="w-full">
-                <SearchBar />
+            <div className=" g:mx-0 flex items-center py-4 pl-6 lg:max-w-none xl:mx-0 xl:px-0">
+              <div className="flex w-full flex-row">
+                <div className="flex flex-1 items-center">
+                  <SearchBar />
+                </div>
                 <div className="flex items-center lg:hidden">{children}</div>
               </div>
             </div>
@@ -70,15 +72,17 @@ const HeaderMenu = () => {
         >
           <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1">
             {sessionData ? (
-              <div className="mx-4 my-2 flex">
+              <div className="border-gray:200 flex border-b px-4 py-3">
                 <UserImage
                   image={sessionData?.user?.image ?? ""}
                   className="aspect-square"
                 />
-                <div className="ml-2 flex w-full flex-col justify-start truncate">
-                  <p className="truncate text-sm font-semibold text-gray-700">
-                    <span>{sessionData?.user?.name}</span>
-                  </p>
+                <div className="ml-2 flex w-full flex-col justify-center truncate">
+                  {sessionData?.user?.name && (
+                    <p className="truncate text-sm font-semibold text-gray-700">
+                      <span>{sessionData?.user?.name}</span>
+                    </p>
+                  )}
                   <p className="truncate text-sm text-gray-600">
                     <span>{sessionData?.user?.email}</span>
                   </p>
@@ -90,7 +94,11 @@ const HeaderMenu = () => {
               </p>
             )}
             {Navigation.map((item) => (
-              <MenuItem key={item.name} item={item} />
+              <MenuItem
+                key={item.name}
+                item={item}
+                underlined={["Terms of Service", "Log Out"]}
+              />
             ))}
           </Menu.Items>
         </Transition>
@@ -113,7 +121,12 @@ const HeaderMenu = () => {
   );
 };
 
-const MenuItem = ({ item }: { item: NavigationItem }) => {
+interface MenuItemProps {
+  item: NavigationItem;
+  underlined: string[];
+}
+
+const MenuItem = ({ item, underlined }: MenuItemProps) => {
   return (
     <Menu.Item>
       {({ active }) => (
@@ -129,7 +142,7 @@ const MenuItem = ({ item }: { item: NavigationItem }) => {
           href={item.path ?? "/"}
           className={cx([
             active ? "bg-gray-100" : "",
-            item.name === "Terms of Service" ? "border-gray:200 border-t" : "",
+            underlined.includes(item.name) ? "border-gray:200 border-t" : "",
             "block px-4 py-2 text-sm text-gray-700",
           ])}
         >

@@ -98,6 +98,16 @@ export const getMobileNavigation = (
         path: `mailto:vidchill@vidchill.com`,
         icon: (className) => <MessagePlusSquare className={className} />,
       },
+      {
+        icon: (className) => <File className={className} />,
+        name: "Terms of Service",
+        path: "/Blog/TOS",
+      },
+      {
+        icon: (className) => <Lock className={className} />,
+        name: "Privacy",
+        path: "/Blog/Privacy",
+      },
     ];
   return [
     {
@@ -105,11 +115,20 @@ export const getMobileNavigation = (
       path: `/Blog/Help`,
       icon: (className) => <HelpCircle className={className} />,
     },
-
     {
       name: "Feedback",
       path: `mailto:vidchill@vidchill.com`,
       icon: (className) => <MessagePlusSquare className={className} />,
+    },
+    {
+      icon: (className) => <File className={className} />,
+      name: "Terms of Service",
+      path: "/Blog/TOS",
+    },
+    {
+      icon: (className) => <Lock className={className} />,
+      name: "Privacy",
+      path: "/Blog/Privacy",
     },
   ];
 };

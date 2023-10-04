@@ -24,7 +24,7 @@ const SearchBar = () => {
       <label htmlFor="search" className="sr-only">
         Search
       </label>
-      <div className="relative ">
+      <div className="relative w-full">
         <div className="pointer-events-none absolute inset-y-0 left-0 z-50 flex items-center pl-3">
           <Search className="h-5 w-5 text-gray-400" />
         </div>

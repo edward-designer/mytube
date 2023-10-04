@@ -1,6 +1,8 @@
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { type NextRouter, useRouter } from "next/router";
 import Link from "next/link";
+
+import { Transition } from "@headlessui/react";
 
 import { cx } from "@/utils/helpers";
 import {
@@ -8,11 +10,15 @@ import {
   getMobileNavigation,
   type NavigationItem,
 } from "@/utils/getData";
+import { Button } from "./Buttons";
+import { Logo } from "./Icons/Logo";
+import UserImage from "./Video/UserImage";
+import LogOut from "./Icons/LogOut";
 
 interface SidebarProps {
   isOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
-  closeSidebar?: boolean;
+  closeSidebar: () => void;
 }
 
 const Sidebar = ({ isOpen, setSidebarOpen, closeSidebar }: SidebarProps) => {
@@ -20,50 +26,185 @@ const Sidebar = ({ isOpen, setSidebarOpen, closeSidebar }: SidebarProps) => {
   const { data: sessionData } = useSession();
   const userId = sessionData?.user.id;
 
-  const DesktopNavigation = getDesktopNavigation(userId);
-  const mobileNavigation = getMobileNavigation(userId);
+  const desktopNavigation = getDesktopNavigation(userId);
 
   return (
     <>
       <div
         className={cx([
-          closeSidebar ? "lg:w-20" : "lg:w-56",
-          "lg: bottom-0 top-16 -translate-x-full bg-red-400 transition-all lg:fixed lg:z-40 lg:flex lg:translate-x-0 lg:flex-col",
+          "w-56",
+          "-mr-56 -translate-x-full transition-all lg:bottom-0 lg:z-40 lg:mr-0 lg:flex lg:translate-x-0 lg:flex-col",
         ])}
       >
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto border border-gray-200 bg-white px-6 pb-4">
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto border border-t-0 border-gray-200 bg-white px-6 pb-4">
           <nav className="flex flex-1 flex-col pt-8">
             <ul role="list" className="flex flex-1 flex-col justify-between">
               <li>
                 <ul role="list" className="-mx-2 space-y-1 ">
-                  {DesktopNavigation.filter(
-                    (item) => item.name !== "Settings" && item.name !== "Help",
-                  ).map((item) => (
-                    <NavItem key={item.name} item={item} router={router} />
-                  ))}
+                  {desktopNavigation
+                    .filter(
+                      (item) =>
+                        item.name !== "Settings" && item.name !== "Help",
+                    )
+                    .map((item) => (
+                      <NavItem key={item.name} item={item} router={router} />
+                    ))}
                 </ul>
               </li>
 
               <li>
                 <ul role="list" className="-mx-2 space-y-1 ">
-                  {DesktopNavigation.filter(
-                    (item) => item.name === "Settings" || item.name === "Help",
-                  ).map((item) => (
-                    <NavItem key={item.name} item={item} router={router} />
-                  ))}
+                  {desktopNavigation
+                    .filter(
+                      (item) =>
+                        item.name === "Settings" || item.name === "Help",
+                    )
+                    .map((item) => (
+                      <NavItem key={item.name} item={item} router={router} />
+                    ))}
                 </ul>
               </li>
             </ul>
           </nav>
         </div>
       </div>
+      <MobileMenu isOpen={isOpen} closeSidebar={closeSidebar} />
     </>
   );
 };
 
 export default Sidebar;
 
-/* NavItem Componenet*/
+const MobileMenu = ({
+  isOpen,
+  closeSidebar,
+}: {
+  isOpen: boolean;
+  closeSidebar: () => void;
+}) => {
+  const router = useRouter();
+  const { data: sessionData } = useSession();
+  const userId = sessionData?.user.id;
+  const mobileNavigation = getMobileNavigation(userId);
+
+  return (
+    <Transition show={isOpen} className="absolute inset-0 z-50 lg:hidden">
+      <Transition.Child
+        enter="transition-opacity ease-in-out duration-300"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity ease-in-out duration-300"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <div className="fixed inset-0 bg-slate-500/50" aria-hidden="true"></div>
+      </Transition.Child>
+      <Transition.Child
+        enter="transition ease-in-out duration-500 transform"
+        enterFrom="-translate-x-full"
+        enterTo="translate-x-0"
+        leave="transition ease-in-out duration-300 transform"
+        leaveFrom="translate-x-0"
+        leaveTo="-translate-x-full"
+      >
+        <div className="fixed flex h-screen w-80 bg-white px-4">
+          <Button
+            onClick={closeSidebar}
+            className="absolute right-0 translate-x-full"
+          >
+            X
+          </Button>
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white">
+            <div className="flex flex-shrink-0 items-center border-b border-gray-200 p-4">
+              <Link href="/" aria-label="home">
+                <Logo className="h-10" />
+              </Link>
+            </div>
+            <nav className="mx-4 flex flex-1 flex-col">
+              <ul role="list" className="flex flex-1 flex-col justify-between">
+                <li>
+                  <ul role="list" className="-mx-2 space-y-1 ">
+                    {mobileNavigation
+                      .filter(
+                        (item) =>
+                          item.name !== "Terms of Service" &&
+                          item.name !== "Privacy",
+                      )
+                      .map((item) => (
+                        <NavItem key={item.name} item={item} router={router} />
+                      ))}
+                  </ul>
+                </li>
+
+                <li>
+                  <ul role="list" className="-mx-2 space-y-1 ">
+                    {mobileNavigation
+                      .filter(
+                        (item) =>
+                          item.name === "Terms of Service" ||
+                          item.name === "Privacy",
+                      )
+                      .map((item) => (
+                        <NavItem key={item.name} item={item} router={router} />
+                      ))}
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+            <div className="flex flex-col gap-2 border-t border-gray-200 py-4">
+              {sessionData ? (
+                <>
+                  <div className="flex px-4 py-3">
+                    <UserImage
+                      image={sessionData?.user?.image ?? ""}
+                      className="aspect-square"
+                    />
+                    <div className="ml-2 flex w-full flex-col justify-center truncate">
+                      {sessionData?.user?.name && (
+                        <p className="truncate text-sm font-semibold text-gray-700">
+                          <span>{sessionData?.user?.name}</span>
+                        </p>
+                      )}
+                      <p className="truncate text-sm text-gray-600">
+                        <span>{sessionData?.user?.email}</span>
+                      </p>
+                    </div>
+
+                    <Button
+                      variant="tertiary-gray"
+                      onClick={() => void signOut()}
+                    >
+                      <LogOut className="w-6 stroke-primary-500" />
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="primary"
+                    size="2xl"
+                    onClick={() => void signIn()}
+                    className="rounded-md"
+                  >
+                    Sign Up
+                  </Button>
+                  <Button
+                    variant="tertiary-gray"
+                    size="2xl"
+                    onClick={() => void signIn()}
+                    className="rounded-md border border-gray-200"
+                  >
+                    Log In
+                  </Button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </Transition.Child>
+    </Transition>
+  );
+};
 
 interface NavItemProps {
   item: NavigationItem;
