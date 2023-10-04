@@ -202,3 +202,30 @@ export const getHeaderNavigation = (
     },
   ];
 };
+
+export const getFooterNavigation = (
+  userId: string | undefined,
+): NavigationItem[] => [
+  {
+    name: "Home",
+    path: `/`,
+    icon: (className) => <Home className={className} />,
+  },
+  {
+    name: "History",
+    path: userId !== undefined ? `/playlist/History` : "sign-in",
+    icon: (className) => <ClockRewind className={className} />,
+  },
+  {
+    name: "Library",
+    path:
+      userId !== undefined ? `/${String(userId)}/ProfilePlaylists` : "sign-in",
+    icon: (className) => <Folder className={className} />,
+  },
+  {
+    name: "Following",
+    path:
+      userId !== undefined ? `/${String(userId)}/ProfileFollowing` : "sign-in",
+    icon: (className) => <UserCheck className={className} />,
+  },
+];

@@ -19,9 +19,17 @@ interface SidebarProps {
   isOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
   closeSidebar: () => void;
+  expandSideBar: boolean;
+  setExpandSideBar: (state: boolean) => void;
 }
 
-const Sidebar = ({ isOpen, setSidebarOpen, closeSidebar }: SidebarProps) => {
+const Sidebar = ({
+  isOpen,
+  setSidebarOpen,
+  closeSidebar,
+  expandSideBar,
+  setExpandSideBar,
+}: SidebarProps) => {
   const router = useRouter();
   const { data: sessionData } = useSession();
   const userId = sessionData?.user.id;
@@ -32,11 +40,15 @@ const Sidebar = ({ isOpen, setSidebarOpen, closeSidebar }: SidebarProps) => {
     <>
       <div
         className={cx([
-          "w-56",
-          "-mr-56 -translate-x-full transition-all lg:bottom-0 lg:z-40 lg:mr-0 lg:flex lg:translate-x-0 lg:flex-col",
+          expandSideBar ? "-ml-56 w-56 " : "-ml-[4em] w-[4em]",
+          "top-0 shrink-0 -translate-x-full transition-all lg:sticky lg:bottom-0 lg:z-40 lg:ml-0 lg:mr-0 lg:flex lg:translate-x-0 lg:flex-col",
         ])}
       >
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto border border-t-0 border-gray-200 bg-white px-6 pb-4">
+        <div
+          onMouseEnter={() => setExpandSideBar(true)}
+          onMouseLeave={() => setExpandSideBar(false)}
+          className="flex grow flex-col gap-y-5 overflow-y-auto border border-t-0 border-gray-200 bg-white px-6 pb-4"
+        >
           <nav className="flex flex-1 flex-col pt-8">
             <ul role="list" className="flex flex-1 flex-col justify-between">
               <li>
@@ -47,7 +59,13 @@ const Sidebar = ({ isOpen, setSidebarOpen, closeSidebar }: SidebarProps) => {
                         item.name !== "Settings" && item.name !== "Help",
                     )
                     .map((item) => (
-                      <NavItem key={item.name} item={item} router={router} />
+                      <NavItem
+                        key={item.name}
+                        item={item}
+                        router={router}
+                        expandSideBar={expandSideBar}
+                        setExpandSideBar={setExpandSideBar}
+                      />
                     ))}
                 </ul>
               </li>
@@ -60,7 +78,13 @@ const Sidebar = ({ isOpen, setSidebarOpen, closeSidebar }: SidebarProps) => {
                         item.name === "Settings" || item.name === "Help",
                     )
                     .map((item) => (
-                      <NavItem key={item.name} item={item} router={router} />
+                      <NavItem
+                        key={item.name}
+                        item={item}
+                        router={router}
+                        expandSideBar={expandSideBar}
+                        setExpandSideBar={setExpandSideBar}
+                      />
                     ))}
                 </ul>
               </li>
@@ -209,16 +233,23 @@ const MobileMenu = ({
 interface NavItemProps {
   item: NavigationItem;
   router: NextRouter;
-  closeSidebar?: boolean;
+  expandSideBar?: boolean;
+  setExpandSideBar?: (state: boolean) => void;
 }
 
-const NavItem = ({ item, router, closeSidebar }: NavItemProps) => {
+const NavItem = ({
+  item,
+  router,
+  expandSideBar = true,
+  setExpandSideBar,
+}: NavItemProps) => {
   const currentPath = router.asPath;
   const isCurrentPage = item.path === currentPath;
   return (
     <li>
       <Link
         href="#"
+        onFocus={() => setExpandSideBar?.(true)}
         onClick={(e) => {
           e.preventDefault();
           if (item.path === "sign-in") {
@@ -235,11 +266,13 @@ const NavItem = ({ item, router, closeSidebar }: NavItemProps) => {
         ])}
       >
         {isCurrentPage
-          ? item.icon("h-5 w-5 shrink-0 stroke-primary-600 ")
+          ? item.icon("m-1 h-5 w-5 shrink-0 stroke-primary-600 ")
           : item.icon(
-              "h-5 w-5 shrink-0  stroke-gray-500  group-hover:stroke-primary-600",
+              "m-1 h-5 w-5 shrink-0 stroke-gray-500  group-hover:stroke-primary-600",
             )}
-        <p className={cx([closeSidebar ? "hidden" : ""])}>{item.name}</p>
+        <p className={cx([expandSideBar ? "" : "hidden", "whitespace-nowrap"])}>
+          {item.name}
+        </p>
       </Link>
     </li>
   );

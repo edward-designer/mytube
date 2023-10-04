@@ -6,7 +6,8 @@ import Menu from "./Icons/Menu";
 import Footer from "./Footer";
 
 const Layout = ({ children }: { children: ReactElement }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [expandSideBar, setExpandSideBar] = useState(false);
   const setSidebarOpen = () => setIsOpen(true);
   const closeSidebar = () => setIsOpen(false);
 
@@ -17,7 +18,7 @@ const Layout = ({ children }: { children: ReactElement }) => {
         <meta name="description" content="A Youtube Clone" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex h-screen flex-col">
+      <main className="relative flex h-screen flex-col">
         <Navbar>
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -28,16 +29,18 @@ const Layout = ({ children }: { children: ReactElement }) => {
           </button>
         </Navbar>
 
-        <div className="flex h-full flex-row">
+        <div className="flex flex-1 overflow-y-auto">
           <Sidebar
             isOpen={isOpen}
             closeSidebar={closeSidebar}
             setSidebarOpen={setSidebarOpen}
+            expandSideBar={expandSideBar}
+            setExpandSideBar={setExpandSideBar}
           />
-          <div className="lg:hidden">
-            <Footer />
-          </div>
-          <div>{children}</div>
+          {children}
+        </div>
+        <div className="bottom-0 z-40 w-full bg-white lg:hidden">
+          <Footer />
         </div>
       </main>
     </>

@@ -19,23 +19,23 @@ const Navbar = ({ children }: NavbarProps) => {
   return (
     <>
       <div className="relative z-50 w-full border border-gray-200 bg-white shadow-sm">
-        <div className="mx-auto flex max-w-full px-6 lg:px-16 xl:grid xl:grid-cols-12">
-          <div className="flex flex-shrink-0 items-center lg:static xl:col-span-2">
+        <div className="mx-auto flex max-w-full gap-4 px-6 lg:px-16 ">
+          <div className="flex flex-shrink-0 items-center lg:static">
             <Link href="/" aria-label="home">
               <Logo className="h-10" />
             </Link>
           </div>
-          <div className="w-full min-w-0 flex-1 lg:px-0 xl:col-span-8">
-            <div className=" g:mx-0 flex items-center py-4 pl-6 lg:max-w-none xl:mx-0 xl:px-0">
+          <div className="w-full min-w-0 flex-1 lg:px-0">
+            <div className=" g:mx-0 flex items-center py-4 pl-6 ">
               <div className="flex w-full flex-row">
-                <div className="flex flex-1 items-center">
+                <div className="flex flex-1 items-center pl-4">
                   <SearchBar />
                 </div>
                 <div className="flex items-center lg:hidden">{children}</div>
               </div>
             </div>
           </div>
-          <div className="m-0 hidden w-max px-0 lg:flex lg:items-center lg:justify-end xl:col-span-2">
+          <div className="m-0 hidden w-max px-0 lg:flex lg:items-center lg:justify-end">
             <HeaderMenu />
           </div>
         </div>
@@ -54,7 +54,7 @@ const HeaderMenu = () => {
     <>
       <Menu as="div" className="relative mx-2 flex-shrink-0">
         <div>
-          <Menu.Button className="flex rounded-full focus:outline-none focus:ring-primary-500 focus:ring-offset-2">
+          <Menu.Button className="flex rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500">
             {sessionData ? (
               <UserImage image={sessionData?.user.image ?? ""} />
             ) : (
