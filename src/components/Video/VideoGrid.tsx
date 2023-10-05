@@ -114,7 +114,11 @@ const VideoCard = ({
           >
             {variant === "home" && <UserImage image={user.image ?? ""} />}
             <div className="w-full">
-              <VideoTitle title={video.title ?? ""} limitHeight={true} />
+              <VideoTitle
+                title={video.title ?? ""}
+                limitHeight={true}
+                limitSize={true}
+              />
               <VideoInfo views={video.views} createdAt={video.createdAt} />
               <UserName name={user.name ?? ""} />
             </div>
@@ -136,9 +140,13 @@ export const VideoTitle = ({
 }) => {
   return (
     <h1
-      className={`max-w-md font-semibold leading-6 text-gray-900 group-hover:text-gray-600 ${
+      className={`font-semibold leading-6 text-gray-900 group-hover:text-gray-600 ${
         limitSize ? "text-base" : "text-lg"
-      } ${limitHeight ? "max-h-12 w-full overflow-hidden" : ""}`}
+      } ${
+        limitHeight
+          ? "line-clamp-2 max-h-12 w-full max-w-md overflow-hidden"
+          : ""
+      }`}
     >
       {title}
     </h1>
@@ -147,7 +155,7 @@ export const VideoTitle = ({
 
 export const VideoDescription = ({ description }: { description: string }) => {
   return (
-    <p className="mt-2 h-5 max-w-md overflow-hidden text-sm leading-6 text-gray-600">
+    <p className="mt-2 overflow-hidden text-sm leading-6 text-gray-600">
       {description}
     </p>
   );

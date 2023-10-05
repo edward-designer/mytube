@@ -6,7 +6,9 @@ import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import VideoGrid from "@/components/Video/VideoGrid";
 
 const Home: NextPage = () => {
-  const { data, isLoading, error } = api.video.getRandomVideos.useQuery(40);
+  const { data, isLoading, error } = api.video.getRandomVideos.useQuery({
+    count: 30,
+  });
 
   const Message = () => {
     if (isLoading) return <LoadingMessage />;

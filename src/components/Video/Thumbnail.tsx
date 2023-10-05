@@ -7,7 +7,7 @@ export function Thumbnail({ thumbnailUrl }: { thumbnailUrl: string }) {
         src={thumbnailUrl || "/background.jpg"}
         alt="Alternative"
         fill
-        className="absolute inset-0 left-0 top-0 rounded-2xl"
+        className="absolute inset-0 left-0 top-0 rounded-2xl object-cover"
       />
     </div>
   );

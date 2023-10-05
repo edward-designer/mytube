@@ -3,17 +3,13 @@
  */
 
 import { z } from "zod";
-import { EngagementType, type PrismaClient } from "@prisma/client";
+import { EngagementType } from "@prisma/client";
 
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
-
-type Context = {
-  db: PrismaClient;
-};
 
 export const videoRouter = createTRPCRouter({
   getVideoById: publicProcedure
@@ -121,11 +117,19 @@ export const videoRouter = createTRPCRouter({
     }),
 
   getRandomVideos: publicProcedure
-    .input(z.number())
+    .input(
+      z.object({
+        count: z.number(),
+        excludeId: z.string().optional(),
+      }),
+    )
     .query(async ({ ctx, input }) => {
       const videosWithUser = await ctx.db.video.findMany({
         where: {
           publish: true,
+          NOT: {
+            id: input.excludeId,
+          },
         },
         include: {
           user: true,
@@ -143,6 +147,7 @@ export const videoRouter = createTRPCRouter({
               videoId: video.id,
               engagementType: EngagementType.VIEW,
             },
+            take: input.count,
           });
           return {
             ...video,
@@ -152,10 +157,7 @@ export const videoRouter = createTRPCRouter({
       );
 
       // Generate an array of indices
-      const indices = Array.from(
-        { length: videosWithCounts.length },
-        (_, i) => i,
-      );
+      const indices = Array.from({ length: input.count }, (_, i) => i);
 
       // Shuffle the indices array
       for (let i = indices.length - 1; i > 0; i--) {
@@ -170,8 +172,8 @@ export const videoRouter = createTRPCRouter({
       const shuffledVideosWithCounts = indices.map((i) => videosWithCounts[i]);
       const shuffledUsers = indices.map((i) => users[i]);
 
-      const randomVideos = shuffledVideosWithCounts.slice(0, input);
-      const randomUsers = shuffledUsers.slice(0, input);
+      const randomVideos = shuffledVideosWithCounts.slice(0, input.count);
+      const randomUsers = shuffledUsers.slice(0, input.count);
       return { videos: randomVideos, users: randomUsers };
     }),
 });

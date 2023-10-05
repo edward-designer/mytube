@@ -16,26 +16,47 @@ import {
 } from "@/components/Video/VideoGrid";
 import Link from "next/link";
 import UserImage from "@/components/Video/UserImage";
+import { useEffect } from "react";
+import { assertString } from "@/utils/helpers";
+import FollowButton from "@/components/Buttons/FolllowButton";
+import LikeButton from "@/components/Buttons/LikeButton";
 
 const VideoPage: NextPage = () => {
   const router = useRouter();
-  const { videoId } = router.query;
+  const videoId = router.query?.videoId ?? "";
   const { data: sessionData } = useSession();
   const viewerId = sessionData?.user?.id ?? "";
 
+  assertString(videoId);
+
   const {
     data: videoData,
-    isLoading: videoLoading,
-    error: videoError,
-    refetch: refetchVideoData,
-  } = api.video.getVideoById.useQuery({ id: videoId as string, viewerId });
+    isLoading,
+    isFetching,
+    error,
+    refetch,
+  } = api.video.getVideoById.useQuery({ id: videoId, viewerId });
 
-  if (videoLoading) return <LoadingMessage />;
+  const addViewMutation = api.videoEngagement.addViewCount.useMutation();
+  const addView = (input: { id: string; userId: string }) => {
+    addViewMutation.mutate(input);
+  };
+
+  useEffect(() => {
+    void addView({
+      id: videoId,
+      userId: viewerId,
+    });
+  }, [videoId]);
+
+  if (isLoading || isFetching) return <LoadingMessage />;
   if (
     !(
       typeof videoId === "string" &&
       typeof viewerId === "string" &&
-      !videoError
+      !error &&
+      videoData.video &&
+      videoData.viewer
     )
   )
     return (
@@ -47,7 +68,7 @@ const VideoPage: NextPage = () => {
     );
 
   const videoURL = videoData?.video.videoUrl ?? "";
-  const { video, user } = videoData;
+  const { video, user, viewer } = videoData;
 
   return (
     <>
@@ -69,13 +90,29 @@ const VideoPage: NextPage = () => {
             <div className="min-w-0 flex-1 space-y-3 ">
               <div className="xs:flex-wrap flex flex-row justify-between gap-4 max-md:flex-wrap">
                 <div className="flex flex-col items-start justify-center gap-1 self-stretch ">
-                  <VideoTitle title={video.title ?? ""} />
+                  <VideoTitle
+                    title={video.title ?? ""}
+                    limitHeight={false}
+                    limitSize={false}
+                  />
                   <VideoInfo views={video.views} createdAt={video.createdAt} />
                 </div>
-                <div className="flex-inline flex items-end justify-start  gap-4 self-start  "></div>
+                <div className="flex-inline flex items-end justify-start self-start">
+                  <LikeButton
+                    videoId={video.id}
+                    engagement={{
+                      likes: video.likes,
+                      dislikes: video.dislikes,
+                    }}
+                    viewer={{
+                      hasLiked: viewer.hasLiked,
+                      hasDisliked: viewer.hasDisliked,
+                    }}
+                  />
+                </div>
               </div>
 
-              <div className="flex flex-row  place-content-between gap-x-4 ">
+              <div className="flex flex-row place-content-between items-center gap-x-4 ">
                 <Link
                   href={`/${video.userId}/ProfileVideos`}
                   key={video.userId}
@@ -91,6 +128,12 @@ const VideoPage: NextPage = () => {
                     </button>
                   </div>
                 </Link>
+                <FollowButton
+                  followingId={video.userId}
+                  viewer={{
+                    hasFollowed: viewer.hasFollowed,
+                  }}
+                />
               </div>
               <VideoDescription description={video.description ?? ""} />
             </div>

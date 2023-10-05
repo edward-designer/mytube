@@ -1,17 +1,23 @@
 import { api } from "@/utils/api";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import VideoGrid from "./VideoGrid";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import LoadingMessage from "../Loading/Loading";
 import { useRouter } from "next/router";
+import { assertString } from "@/utils/helpers";
 
 const RecommendedVideos = () => {
   const router = useRouter();
   const { videoId } = router.query;
+  assertString(videoId);
+
   const { data, isLoading, isFetching, error, refetch } =
-    api.video.getRandomVideos.useQuery(10, {
-      enabled: false,
-    });
+    api.video.getRandomVideos.useQuery(
+      { count: 12, excludeId: videoId },
+      {
+        enabled: false,
+      },
+    );
 
   useEffect(() => {
     void refetch();
