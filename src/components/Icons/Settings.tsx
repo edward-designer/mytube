@@ -6,7 +6,7 @@ export default function Settings(props: React.SVGProps<SVGSVGElement>) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_219_8007)">
+      <g clipPath="url(#clip0_219_8007)">
         <path
           d="M8.00016 10C9.10473 10 10.0002 9.10458 10.0002 8.00001C10.0002 6.89544 9.10473 6.00001 8.00016 6.00001C6.89559 6.00001 6.00016 6.89544 6.00016 8.00001C6.00016 9.10458 6.89559 10 8.00016 10Z"
           // stroke="#344054"

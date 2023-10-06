@@ -1,7 +1,10 @@
+import { useEffect } from "react";
 import { type NextPage } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
+
 import ReactPlayer from "react-player";
 
 import { api } from "@/utils/api";
@@ -14,12 +17,12 @@ import {
   VideoInfo,
   VideoTitle,
 } from "@/components/Video/VideoGrid";
-import Link from "next/link";
 import UserImage from "@/components/Video/UserImage";
-import { useEffect } from "react";
 import { assertString } from "@/utils/helpers";
 import FollowButton from "@/components/Buttons/FolllowButton";
 import LikeButton from "@/components/Buttons/LikeButton";
+import Comments from "@/components/Comment/Comments";
+import SaveButton from "@/components/Buttons/SaveButton";
 
 const VideoPage: NextPage = () => {
   const router = useRouter();
@@ -32,10 +35,20 @@ const VideoPage: NextPage = () => {
   const {
     data: videoData,
     isLoading,
-    isFetching,
     error,
     refetch,
-  } = api.video.getVideoById.useQuery({ id: videoId, viewerId });
+  } = api.video.getVideoById.useQuery(
+    { id: videoId, viewerId },
+    {
+      enabled: false,
+      onSuccess: () => {
+        addView({
+          id: videoId,
+          userId: viewerId,
+        });
+      },
+    },
+  );
 
   const addViewMutation = api.videoEngagement.addViewCount.useMutation();
   const addView = (input: { id: string; userId: string }) => {
@@ -43,20 +56,17 @@ const VideoPage: NextPage = () => {
   };
 
   useEffect(() => {
-    void addView({
-      id: videoId,
-      userId: viewerId,
-    });
-  }, [videoId]);
+    void refetch();
+  }, [videoId, viewerId]);
 
-  if (isLoading || isFetching) return <LoadingMessage />;
+  if (isLoading) return <LoadingMessage />;
   if (
     !(
       typeof videoId === "string" &&
       typeof viewerId === "string" &&
       !error &&
-      videoData.video &&
-      videoData.viewer
+      videoData?.video &&
+      videoData?.viewer
     )
   )
     return (
@@ -109,6 +119,7 @@ const VideoPage: NextPage = () => {
                       hasDisliked: viewer.hasDisliked,
                     }}
                   />
+                  <SaveButton videoId={videoId} hasSaved={viewer.hasSaved} />
                 </div>
               </div>
 
@@ -133,11 +144,17 @@ const VideoPage: NextPage = () => {
                   viewer={{
                     hasFollowed: viewer.hasFollowed,
                   }}
+                  refetch={refetch}
                 />
               </div>
               <VideoDescription description={video.description ?? ""} />
             </div>
           </div>
+          <Comments
+            videoId={videoId}
+            comments={videoData.comments}
+            refetch={refetch}
+          />
         </div>
         <aside className="flex-1 basis-96">
           <RecommendedVideos />

@@ -20,6 +20,7 @@ const getOrCreatePlaylist = async (
       data: { title, userId },
     });
   }
+  console.log(playlist);
   return playlist;
 };
 

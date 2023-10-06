@@ -27,6 +27,9 @@ export const videoRouter = createTRPCRouter({
         include: {
           user: true,
           comments: {
+            orderBy: {
+              createdAt: "desc",
+            },
             include: {
               user: true,
             },
@@ -42,7 +45,7 @@ export const videoRouter = createTRPCRouter({
 
       const followers = await ctx.db.followEngagement.count({
         where: {
-          followerId: video.userId,
+          followingId: video.userId,
         },
       });
       const likes = await ctx.db.videoEngagement.count({
@@ -70,10 +73,14 @@ export const videoRouter = createTRPCRouter({
         user,
         comment,
       }));
-
+      let viewerHasSaved = false;
       let viewerHasLiked = false;
       let viewerHasDisliked = false;
       let viewerHasFollowed = false;
+
+      const viewerPlaylist = await ctx.db.playlist.findMany({
+        where: { userId: input.viewerId, title: { not: "History" } },
+      });
 
       if (input.viewerId && input.viewerId !== "") {
         viewerHasLiked = !!(await ctx.db.videoEngagement.findFirst({
@@ -98,15 +105,26 @@ export const videoRouter = createTRPCRouter({
             followerId: input.viewerId,
           },
         }));
+        viewerHasSaved = !!(await ctx.db.playlistHasVideo.findFirst({
+          where: {
+            videoId: input.id,
+            playlistId: {
+              in: viewerPlaylist.map((list) => list.id),
+            },
+          },
+        }));
       } else {
         viewerHasLiked = false;
         viewerHasDisliked = false;
         viewerHasFollowed = false;
+        viewerHasSaved = false;
       }
       const viewer = {
         hasLiked: viewerHasLiked,
         hasDisliked: viewerHasDisliked,
         hasFollowed: viewerHasFollowed,
+        hasSaved: viewerHasSaved,
+        viewerPlaylist,
       };
       return {
         video: videoWithLikesDislikesViews,
@@ -136,7 +154,6 @@ export const videoRouter = createTRPCRouter({
         },
       });
 
-      // Split videos and users into separate arrays
       const videos = videosWithUser.map(({ user, ...video }) => video);
       const users = videosWithUser.map(({ user }) => user);
 
@@ -156,10 +173,8 @@ export const videoRouter = createTRPCRouter({
         }),
       );
 
-      // Generate an array of indices
       const indices = Array.from({ length: input.count }, (_, i) => i);
 
-      // Shuffle the indices array
       for (let i = indices.length - 1; i > 0; i--) {
         if (indices[i] !== undefined) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -168,12 +183,52 @@ export const videoRouter = createTRPCRouter({
           [indices[i], indices[j]] = [indices[j], indices[i]];
         }
       }
-      // Use the shuffled indices to re-order videosWithCounts and users
+
       const shuffledVideosWithCounts = indices.map((i) => videosWithCounts[i]);
       const shuffledUsers = indices.map((i) => users[i]);
 
       const randomVideos = shuffledVideosWithCounts.slice(0, input.count);
       const randomUsers = shuffledUsers.slice(0, input.count);
       return { videos: randomVideos, users: randomUsers };
+    }),
+
+  getVideosByUploader: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const videosWithUser = await ctx.db.video.findMany({
+        where: {
+          publish: true,
+          userId: input.userId,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          user: true,
+        },
+      });
+
+      const videos = videosWithUser.map(({ user, ...video }) => video);
+      const users = videosWithUser.map(({ user }) => user);
+
+      const videosWithCounts = await Promise.all(
+        videos.map(async (video) => {
+          const views = await ctx.db.videoEngagement.count({
+            where: {
+              videoId: video.id,
+              engagementType: EngagementType.VIEW,
+            },
+          });
+          return {
+            ...video,
+            views,
+          };
+        }),
+      );
+      return { videos: videosWithCounts, users };
     }),
 });

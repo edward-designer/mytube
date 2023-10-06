@@ -10,7 +10,7 @@ export function Logo(props: React.SVGProps<SVGSVGElement>) {
       {...props}
       width="100%"
       viewBox="0 0 1437 533"
-      enable-background="new 0 0 1437 533"
+      enableBackground="new 0 0 1437 533"
       xmlSpace="preserve"
     >
       <path

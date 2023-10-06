@@ -12,11 +12,13 @@ interface FollowButton {
   viewer: {
     hasFollowed: boolean;
   };
+  refetch: () => Promise<unknown>;
 }
 export default function FollowButton({
   followingId,
   hideIcon,
   viewer,
+  refetch,
 }: FollowButton) {
   const { data: sessionData } = useSession();
   const [userChoice, setUserChoice] = useState({
@@ -29,7 +31,11 @@ export default function FollowButton({
     } else {
       setUserChoice({ following: true });
     }
-    addFollowMutation.mutate(input);
+    addFollowMutation.mutate(input, {
+      onSuccess: () => {
+        void refetch();
+      },
+    });
   };
   return (
     <>
@@ -45,7 +51,7 @@ export default function FollowButton({
                 })
             : () => void signIn()
         }
-        className="flex"
+        className="flex rounded-lg"
       >
         <UserPlus
           className={cx([

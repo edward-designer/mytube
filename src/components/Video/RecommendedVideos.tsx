@@ -1,5 +1,5 @@
 import { api } from "@/utils/api";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import VideoGrid from "./VideoGrid";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import LoadingMessage from "../Loading/Loading";

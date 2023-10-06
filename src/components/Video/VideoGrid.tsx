@@ -3,6 +3,9 @@ import { Thumbnail } from "./Thumbnail";
 import Image from "next/image";
 import moment from "moment";
 import { cx } from "@/utils/helpers";
+import { useEffect, useRef, useState } from "react";
+import { ChevronDown, ChevronUp } from "../Icons/Chevron";
+import { Button } from "../Buttons";
 
 interface VideoGridProps {
   data: {
@@ -44,11 +47,14 @@ const VideoGrid = ({
 }: VideoGridProps) => {
   const videosToShow = videos.filter((video) => Boolean);
   return (
-    <div className="mb-40">
+    <div className="w-full">
       <div
         className={cx([
-          "flex flex-wrap items-start justify-start gap-6 gap-y-12",
-          variant === "home" ? "p-12" : "",
+          "w-full gap-8",
+          variant === "aside" ? "grid grid-cols-1 gap-y-4" : "",
+          variant === "home"
+            ? "grid grid-cols-1 gap-y-12 p-12 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+            : "",
         ])}
       >
         {videosToShow.map((video, index) => {
@@ -83,8 +89,9 @@ const VideoCard = ({
     <Link
       href={`/video/${video.id}`}
       className={cx([
-        "flex flex-1 basis-96 flex-col items-start  hover:bg-gray-100",
-        variant === "home" ? "lg:basis-1/4" : "",
+        "flex flex-col items-start hover:bg-gray-100",
+        variant === "home" ? "flex-1 lg:basis-1/4" : "",
+        variant === "aside" ? "flex-1 basis-full" : "",
       ])}
       key={video.id}
     >
@@ -153,11 +160,62 @@ export const VideoTitle = ({
   );
 };
 
-export const VideoDescription = ({ description }: { description: string }) => {
+export const VideoDescription = ({
+  description,
+  linesToShow = 3,
+}: {
+  description: string;
+  linesToShow?: number;
+}) => {
+  const divRef = useRef<null | HTMLParagraphElement>(null);
+  const [isAllVisible, setIsAllVisible] = useState(false);
+
+  const maxHeight = (linesToShow ?? 5) * 1.7;
+
+  useEffect(() => {
+    if (!divRef.current) return;
+    if (divRef.current.clientHeight < divRef.current.scrollHeight) {
+      setIsAllVisible(false);
+    } else {
+      setIsAllVisible(true);
+    }
+  }, [linesToShow]);
+
   return (
-    <p className="mt-2 overflow-hidden text-sm leading-6 text-gray-600">
+    <div
+      ref={divRef}
+      className="relative mt-2
+        overflow-hidden pb-[3em] text-sm leading-6 text-gray-600"
+      style={{
+        maxHeight: isAllVisible
+          ? divRef.current?.scrollHeight
+          : `${maxHeight}em`,
+        transition: "max-height 0.5s cubic-bezier(0, 1, 0, 1)",
+      }}
+    >
       {description}
-    </p>
+
+      <div
+        aria-hidden={true}
+        className={cx([
+          "absolute bottom-0 flex h-[4em] w-full items-end justify-center bg-gradient-to-t  to-transparent text-center",
+          !isAllVisible ? "from-white" : "from-transparent",
+        ])}
+      >
+        <Button
+          variant="tertiary-gray"
+          onClick={() => setIsAllVisible(!isAllVisible)}
+          className={`transition-all ${
+            !isAllVisible ? "rotate-0" : "rotate-180"
+          }`}
+        >
+          <ChevronDown />
+          <span className="sr-only">
+            {isAllVisible ? "Show Less" : "Show More"}
+          </span>
+        </Button>
+      </div>
+    </div>
   );
 };
 

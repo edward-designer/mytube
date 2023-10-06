@@ -3,6 +3,52 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
+  getChannelById: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        viewerId: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findUniqueOrThrow({
+        where: {
+          id: input.id,
+        },
+      });
+      const followerCount = await ctx.db.followEngagement.count({
+        where: {
+          engagementType: EngagementType.FOLLOW,
+          followingId: input.id,
+        },
+      });
+      const followingCount = await ctx.db.followEngagement.count({
+        where: {
+          engagementType: EngagementType.FOLLOW,
+          followerId: input.id,
+        },
+      });
+
+      let hasFollowed = false;
+      if (input.viewerId) {
+        hasFollowed = !!(await ctx.db.followEngagement.findFirst({
+          where: {
+            followerId: input.viewerId,
+            followingId: input.id,
+          },
+        }));
+      }
+      return {
+        user: {
+          ...user,
+          followerCount,
+          followingCount,
+        },
+        viewer: {
+          hasFollowed,
+        },
+      };
+    }),
   addFollow: publicProcedure
     .input(
       z.object({

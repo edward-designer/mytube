@@ -134,7 +134,7 @@ const MobileMenu = ({
         <div className="fixed flex h-screen w-80 bg-white px-4">
           <Button
             onClick={closeSidebar}
-            className="absolute right-0 translate-x-full"
+            className="absolute right-0 translate-x-full rounded-none"
           >
             X
           </Button>

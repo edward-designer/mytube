@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { api } from "@/utils/api";
+import Lottie from "react-lottie-player";
+
+import Like from "@/components/Icons/thumb-up.json";
+import DisLike from "@/components/Icons/thumb-down.json";
+
 import { ThumbsDown, ThumbsUp } from "@/components/Icons/Icons";
 import { cx } from "@/utils/helpers";
 
@@ -35,6 +40,8 @@ export default function LikeButton({
     likes: engagement.likes,
     dislikes: engagement.dislikes,
   });
+  const [clickLike, setClickLike] = useState(false);
+  const [clickDislike, setClickDislike] = useState(false);
 
   const likeDislikeMutation = api.user.handleLikeDislike.useMutation();
 
@@ -48,6 +55,7 @@ export default function LikeButton({
       input.type === EngagementType.LIKE &&
       userChoice.userEngagement === null
     ) {
+      setClickLike(true);
       nextUserChoice.userEngagement = EngagementType.LIKE;
       nextUserChoice.likes = userChoice.likes + 1;
     }
@@ -56,6 +64,7 @@ export default function LikeButton({
       input.type === EngagementType.DISLIKE &&
       userChoice.userEngagement === null
     ) {
+      setClickDislike(true);
       nextUserChoice.userEngagement = EngagementType.DISLIKE;
       nextUserChoice.dislikes = userChoice.dislikes + 1;
     }
@@ -64,6 +73,7 @@ export default function LikeButton({
       input.type === EngagementType.LIKE &&
       userChoice.userEngagement === EngagementType.LIKE
     ) {
+      setClickLike(false);
       nextUserChoice.userEngagement = null;
       nextUserChoice.likes = userChoice.likes - 1;
     }
@@ -72,6 +82,8 @@ export default function LikeButton({
       input.type === EngagementType.LIKE &&
       userChoice.userEngagement === EngagementType.DISLIKE
     ) {
+      setClickLike(true);
+      setClickDislike(false);
       nextUserChoice.userEngagement = EngagementType.LIKE;
       nextUserChoice.likes = userChoice.likes + 1;
       nextUserChoice.dislikes = userChoice.dislikes - 1;
@@ -81,6 +93,7 @@ export default function LikeButton({
       input.type === EngagementType.DISLIKE &&
       userChoice.userEngagement === EngagementType.DISLIKE
     ) {
+      setClickDislike(false);
       nextUserChoice.userEngagement = null;
       nextUserChoice.dislikes = userChoice.dislikes - 1;
     }
@@ -89,6 +102,8 @@ export default function LikeButton({
       input.type === EngagementType.DISLIKE &&
       userChoice.userEngagement === EngagementType.LIKE
     ) {
+      setClickDislike(true);
+      setClickLike(false);
       nextUserChoice.userEngagement = EngagementType.DISLIKE;
       nextUserChoice.likes = userChoice.likes - 1;
       nextUserChoice.dislikes = userChoice.dislikes + 1;
@@ -109,29 +124,37 @@ export default function LikeButton({
         size="xl"
         onClick={
           sessionData
-            ? () =>
+            ? () => {
                 handleLikeDislike({
                   userId,
                   videoId,
                   type: EngagementType.LIKE,
-                })
+                });
+              }
             : () => void signIn()
         }
         className={cx([
-          "group flex rounded-none rounded-l-lg border bg-white hover:bg-white hover:text-primary-700",
+          "group flex items-center rounded-none rounded-l-lg border bg-white !py-0 !ring-0 hover:bg-white hover:text-primary-700",
           userChoice.userEngagement === EngagementType.LIKE
-            ? "text-primary-700"
+            ? "bg-primary-50 text-primary-700"
             : "",
         ])}
       >
-        <ThumbsUp
+        <Lottie
+          animationData={Like}
+          play={clickLike}
+          loop={false}
+          className="h-8 w-8"
+          goTo={0}
+        />
+        {/* <ThumbsUp
           className={cx([
             `mr-2 h-5 w-5 shrink-0`,
             userChoice.userEngagement === EngagementType.LIKE
               ? "stroke-primary-700 "
               : "stroke-gray-900 group-hover:stroke-primary-700",
           ])}
-        />
+        /> */}
         <span className="sr-only">
           {userChoice.userEngagement === EngagementType.LIKE
             ? "Like"
@@ -148,29 +171,37 @@ export default function LikeButton({
         size="xl"
         onClick={
           sessionData
-            ? () =>
+            ? () => {
                 handleLikeDislike({
                   userId,
                   videoId,
                   type: EngagementType.DISLIKE,
-                })
+                });
+              }
             : () => void signIn()
         }
         className={cx([
-          "group flex rounded-none rounded-r-lg border border-l-0 bg-white hover:bg-white hover:text-primary-700",
+          "group flex items-center rounded-none rounded-r-lg border border-l-0 bg-white !py-0 !ring-0 hover:bg-white hover:text-primary-700",
           userChoice.userEngagement === EngagementType.DISLIKE
-            ? "text-primary-700"
+            ? "bg-primary-50 text-primary-700"
             : "",
         ])}
       >
-        <ThumbsDown
+        <Lottie
+          animationData={DisLike}
+          play={clickDislike}
+          loop={false}
+          className="h-8 w-8"
+          goTo={0}
+        />
+        {/*         <ThumbsDown
           className={cx([
             `mr-2 h-5 w-5 shrink-0`,
             userChoice.userEngagement === EngagementType.DISLIKE
               ? "stroke-primary-700 "
               : "stroke-gray-900 group-hover:stroke-primary-700",
           ])}
-        />
+        /> */}
         <span className="sr-only">
           {userChoice.userEngagement === EngagementType.DISLIKE
             ? "Dislike"
