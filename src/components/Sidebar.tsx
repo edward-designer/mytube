@@ -155,7 +155,12 @@ const MobileMenu = ({
                           item.name !== "Privacy",
                       )
                       .map((item) => (
-                        <NavItem key={item.name} item={item} router={router} />
+                        <NavItem
+                          onClick={closeSidebar}
+                          key={item.name}
+                          item={item}
+                          router={router}
+                        />
                       ))}
                   </ul>
                 </li>
@@ -169,7 +174,12 @@ const MobileMenu = ({
                           item.name === "Privacy",
                       )
                       .map((item) => (
-                        <NavItem key={item.name} item={item} router={router} />
+                        <NavItem
+                          onClick={closeSidebar}
+                          key={item.name}
+                          item={item}
+                          router={router}
+                        />
                       ))}
                   </ul>
                 </li>
@@ -235,6 +245,7 @@ interface NavItemProps {
   router: NextRouter;
   expandSideBar?: boolean;
   setExpandSideBar?: (state: boolean) => void;
+  onClick?: (state: boolean) => void;
 }
 
 const NavItem = ({
@@ -242,6 +253,7 @@ const NavItem = ({
   router,
   expandSideBar = true,
   setExpandSideBar,
+  onClick,
 }: NavItemProps) => {
   const currentPath = router.asPath;
   const isCurrentPage = item.path === currentPath;
@@ -255,6 +267,7 @@ const NavItem = ({
           if (item.path === "sign-in") {
             void signIn();
           } else {
+            if (onClick) onClick(false);
             void router.push(item.path ?? "/");
           }
         }}

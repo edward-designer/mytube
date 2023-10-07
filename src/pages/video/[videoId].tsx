@@ -86,7 +86,7 @@ const VideoPage: NextPage = () => {
         <title>{videoData?.video.title ?? "Video"}</title>
         <meta name="description" content={video.description ?? ""} />
       </Head>
-      <section className="flex w-full flex-wrap content-start gap-8 p-6 lg:p-12">
+      <section className="flex w-full flex-wrap content-start gap-8 overflow-y-auto p-6 lg:p-12">
         <div className="flex-1 grow-[3] basis-[640px]">
           <ReactPlayer
             url={videoURL}

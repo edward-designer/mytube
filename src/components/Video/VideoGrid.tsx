@@ -47,29 +47,31 @@ const VideoGrid = ({
 }: VideoGridProps) => {
   const videosToShow = videos.filter((video) => Boolean);
   return (
-    <div className="w-full">
-      <div
-        className={cx([
-          "w-full gap-8",
-          variant === "aside" ? "grid grid-cols-1 gap-y-4" : "",
-          variant === "home"
-            ? "grid grid-cols-1 gap-y-12 p-12 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
-            : "",
-        ])}
-      >
-        {videosToShow.map((video, index) => {
-          const user = users[index];
-          if (video === undefined || user === undefined) return;
-          return (
-            <VideoCard
-              key={video.id}
-              video={video}
-              user={user}
-              variant={variant}
-            />
-          );
-        })}
-      </div>
+    <div
+      className={cx([
+        "w-full gap-8",
+        variant === "aside"
+          ? "flex flex-wrap content-start gap-y-4 [&>*]:flex-1 [&>*]:basis-[350px]"
+          : "",
+        variant === "home"
+          ? "grid grid-cols-1 gap-y-12 p-12 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+          : "",
+      ])}
+    >
+      {videosToShow.map((video, index) => {
+        const user = users[index];
+        if (video === undefined || user === undefined) return;
+        return (
+          <VideoCard
+            key={video.id}
+            video={video}
+            user={user}
+            variant={variant}
+          />
+        );
+      })}
+      {/* hack to prevent the last odd element to grow to full width */}
+      {videosToShow.length % 2 !== 0 && <i className="h-0 grow-[100000]" />}
     </div>
   );
 };
@@ -91,7 +93,7 @@ const VideoCard = ({
       className={cx([
         "flex flex-col items-start hover:bg-gray-100",
         variant === "home" ? "flex-1 lg:basis-1/4" : "",
-        variant === "aside" ? "flex-1 basis-full" : "",
+        variant === "aside" ? "flex-1 basis-1/2" : "",
       ])}
       key={video.id}
     >

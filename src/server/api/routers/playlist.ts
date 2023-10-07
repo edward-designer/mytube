@@ -7,6 +7,7 @@ export const playlistRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string(),
+        isExpanded: z.boolean().optional(),
         isHistory: z.boolean().optional(),
       }),
     )
@@ -33,9 +34,11 @@ export const playlistRouter = createTRPCRouter({
             where: {
               playlistId: playlist.id,
             },
+            take: input.isHistory ? 60 : input.isExpanded ? 6 : 1,
           });
         }),
       );
+
       const videosWithUser = await Promise.all(
         videoIdsArray.map(async (videoIds) => {
           const videoIdsonly = videoIds.map((videoId) => videoId.videoId);
@@ -74,16 +77,89 @@ export const playlistRouter = createTRPCRouter({
         }),
       );
 
-      const playlistData = playlists.map((playlist, index) => {
+      const playlistsWithCount = await Promise.all(
+        playlists.map(async (playlist) => {
+          const count = await ctx.db.playlistHasVideo.count({
+            where: {
+              playlistId: playlist.id,
+            },
+          });
+          return { ...playlist, count };
+        }),
+      );
+
+      const playlistData = playlistsWithCount.map((playlist, index) => {
         const videos =
           videosWithCounts[index]?.map(({ user, ...video }) => video) ?? [];
         const users = videosWithCounts[index]?.map(({ user }) => user) ?? [];
         return { playlist, users, videos };
       });
-
       return { playlistData };
     }),
+  getVideosByPlaylistId: publicProcedure
+    .input(
+      z.object({
+        playlistId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const playlist = await ctx.db.playlist.findFirstOrThrow({
+        where: {
+          id: input.playlistId,
+        },
+      });
+      const count = await ctx.db.playlistHasVideo.count({
+        where: {
+          playlistId: playlist.id,
+        },
+      });
 
+      const user = await ctx.db.user.findFirstOrThrow({
+        where: {
+          id: playlist.userId,
+        },
+      });
+
+      const videosInPlaylist = await ctx.db.playlistHasVideo.findMany({
+        where: {
+          playlistId: input.playlistId,
+        },
+      });
+
+      const videosWithUser = await Promise.all(
+        videosInPlaylist.map(async ({ videoId }) => {
+          return await ctx.db.video.findFirstOrThrow({
+            where: {
+              id: videoId,
+            },
+            include: {
+              user: true,
+            },
+          });
+        }),
+      );
+
+      const videosWithCounts = await Promise.all(
+        videosWithUser.map(async (video) => {
+          const views = await ctx.db.videoEngagement.count({
+            where: {
+              videoId: video.id,
+              engagementType: EngagementType.VIEW,
+            },
+          });
+          return {
+            ...video,
+            views,
+          };
+        }),
+      );
+
+      return {
+        playlist: { ...playlist, count },
+        user,
+        videos: videosWithCounts,
+      };
+    }),
   getPlaylists: protectedProcedure
     .input(z.object({ userId: z.string(), videoId: z.string() }))
     .query(async ({ ctx, input }) => {
