@@ -22,7 +22,7 @@ interface PlaylistCardProps {
     description: string | null;
     count: number;
   };
-  variant: "poster" | "link";
+  variant?: "poster" | "link";
 }
 
 const PlaylistCard = ({

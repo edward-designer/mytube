@@ -1,8 +1,60 @@
 import { EngagementType } from "@prisma/client";
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
+  getVideosHistoryById: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const viewedVideoIds = await ctx.db.videoEngagement.findMany({
+        select: {
+          videoId: true,
+        },
+        where: {
+          engagementType: EngagementType.VIEW,
+          userId: input.userId,
+        },
+        orderBy: {
+          updatedAt: "desc",
+        },
+        distinct: ["videoId"],
+      });
+      const videoIds = viewedVideoIds.map(({ videoId }) => videoId);
+      const videosWithUser = await Promise.all(
+        videoIds.map(
+          async (videoId) =>
+            await ctx.db.video.findFirstOrThrow({
+              where: {
+                id: videoId,
+              },
+              include: {
+                user: true,
+              },
+            }),
+        ),
+      );
+
+      const videosWithCounts = await Promise.all(
+        videosWithUser.map(async (video) => {
+          const views = await ctx.db.videoEngagement.count({
+            where: {
+              videoId: video.id,
+              engagementType: EngagementType.VIEW,
+            },
+          });
+          return {
+            ...video,
+            views,
+          };
+        }),
+      );
+      return { videosWithCounts };
+    }),
+
   getChannelById: publicProcedure
     .input(
       z.object({
@@ -48,6 +100,48 @@ export const userRouter = createTRPCRouter({
           hasFollowed,
         },
       };
+    }),
+
+  getFollowingById: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        viewerId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const followingIds = await ctx.db.followEngagement.findMany({
+        where: {
+          engagementType: EngagementType.FOLLOW,
+          followerId: input.userId,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      const followingUsers = await Promise.all(
+        followingIds.map(async ({ followingId }) => {
+          const followingUser = await ctx.db.user.findUniqueOrThrow({
+            where: {
+              id: followingId,
+            },
+          });
+          const followers = await ctx.db.followEngagement.count({
+            where: {
+              followingId: followingId,
+            },
+          });
+          const viewerHasFollowed = !!(await ctx.db.followEngagement.count({
+            where: {
+              followingId: followingId,
+              followerId: input.viewerId,
+            },
+          }));
+          return { ...followingUser, followers, viewerHasFollowed };
+        }),
+      );
+      return { followingUsers };
     }),
   addFollow: publicProcedure
     .input(

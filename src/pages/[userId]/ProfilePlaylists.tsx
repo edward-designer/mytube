@@ -22,7 +22,7 @@ const ProfilePlaylists = () => {
   const userId = router.query?.userId ?? "";
   const { data: sessionData } = useSession();
 
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   let isOwnProfilePage = false;
   assertString(userId);
@@ -50,23 +50,8 @@ const ProfilePlaylists = () => {
       <ProfileHeader />
       <div className="px-8">
         <Button
-          variant="secondary-gray"
+          variant="secondary-white"
           className="aspect-square rounded-l-lg rounded-r-none"
-          disabled={isExpanded}
-          onClick={() => setIsExpanded(true)}
-        >
-          <span className="sr-only">Expanded</span>
-          <Lottie
-            animationData={List}
-            play={false}
-            loop={false}
-            className="h-8 w-8"
-            goTo={30}
-          />
-        </Button>
-        <Button
-          variant="secondary-gray"
-          className="aspect-square rounded-l-none rounded-r-lg"
           disabled={!isExpanded}
           onClick={() => setIsExpanded(false)}
         >
@@ -79,9 +64,24 @@ const ProfilePlaylists = () => {
           />
           <span className="sr-only">Condensed</span>
         </Button>
+        <Button
+          variant="secondary-white"
+          className="aspect-square rounded-l-none rounded-r-lg"
+          disabled={isExpanded}
+          onClick={() => setIsExpanded(true)}
+        >
+          <span className="sr-only">Expanded</span>
+          <Lottie
+            animationData={List}
+            play={false}
+            loop={false}
+            className="h-8 w-8"
+            goTo={30}
+          />
+        </Button>
       </div>
       {isExpanded ? (
-        <div className="flex w-full flex-col p-6">
+        <div className="flex w-full flex-col py-6">
           {data.playlistData.map(({ playlist, videos, users }) => {
             return (
               <section
@@ -89,8 +89,11 @@ const ProfilePlaylists = () => {
                 className="mb-4 max-h-[350px] overflow-hidden border-b pb-4"
               >
                 <h2 className="-mb-6 pl-8 text-xl font-semibold">
-                  <Link href={`/playlist/${playlist.id}`}>
-                    <Folder className="mr-2 inline h-5 w-5 shrink-0 stroke-gray-900" />{" "}
+                  <Link
+                    href={`/playlist/${playlist.id}`}
+                    className="group hover:text-primary-700"
+                  >
+                    <Folder className="mr-2 inline h-5 w-5 shrink-0 stroke-gray-900 group-hover:stroke-primary-700" />{" "}
                     {playlist.title}
                   </Link>
                 </h2>
@@ -102,7 +105,7 @@ const ProfilePlaylists = () => {
           })}
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6 gap-y-10 p-8 md:grid-cols-2 2xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 gap-y-10 p-8 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
           {data.playlistData.map(({ playlist, videos }) => {
             if (videos[0] !== undefined && playlist !== undefined)
               return (

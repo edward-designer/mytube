@@ -9,7 +9,7 @@ type ButtonOrAnchorProps = ButtonHTMLAttributes<HTMLButtonElement> &
   AnchorHTMLAttributes<HTMLAnchorElement>;
 
 interface ButtonProps extends ButtonOrAnchorProps {
-  variant?: "primary" | "secondary-gray" | "tertiary-gray";
+  variant?: "primary" | "secondary-gray" | "secondary-white" | "tertiary-gray";
   size?: "sm" | "md" | "lg" | "xl" | "2xl";
   href?: string;
 }
@@ -36,6 +36,8 @@ const Button = ({
       "rounded-full bg-primary-600 text-white focus:ring-4 hover:bg-primary-700 shadow-sm focus:ring-primary-100 focus-visible:outline-4 focus-visible:outline-primary-100 focus-visible:outline-offset-4",
     "secondary-gray":
       "disabled:opacity-30 rounded-full bg-gray-100 text-gray-500 focus:ring-4 shadow-sm ring-1 ring-inset focus:ring-gray-100  focus-visible:outline-4 focus-visible:outline-gray-100 focus-visible:outline-offset-4 ring-gray-200 hover:text-gray-800 hover:bg-gray-50",
+    "secondary-white":
+      "disabled:opacity-30 disabled:bg-gray-200 rounded-full bg-white text-gray-700 focus:ring-4 shadow-sm ring-1 ring-inset focus:ring-gray-100  focus-visible:outline-4 focus-visible:outline-gray-100 focus-visible:outline-offset-4 ring-gray-200 hover:text-gray-800 hover:bg-primary-50",
     "tertiary-gray":
       "rounded-full bg-gray-50 hover:bg-gray-100 text-gray-500 focus:bg-white hover:text-gray-800",
   };

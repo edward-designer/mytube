@@ -7,15 +7,15 @@ import NotAvailable from "@/components/ErrorMessage/NotAvailable";
 import LoadingMessage from "@/components/Loading/Loading";
 import PlaylistCard from "@/components/Playlist/PlaylistCard";
 import VideoGrid from "@/components/Video/VideoGrid";
+import UserCard from "@/components/Video/UserCard";
 
 const Playlist = () => {
   const router = useRouter();
   const playlistId = router.query?.playlistId ?? "";
-  const { data: sessionData } = useSession();
 
   assertString(playlistId);
-  console.log(router.query);
-  const { data, isLoading, error, refetch } =
+
+  const { data, isLoading, error } =
     api.playlist.getVideosByPlaylistId.useQuery({
       playlistId,
     });
@@ -36,11 +36,23 @@ const Playlist = () => {
     <div className="flex w-full flex-row flex-wrap gap-10 overflow-y-scroll p-10">
       <div className="flex flex-1 basis-[400px]">
         {data.videos[0] && (
-          <PlaylistCard
-            playlist={data.playlist}
-            video={data.videos[0]}
-            variant="poster"
-          />
+          <div className="flex w-full flex-col">
+            <div className="mb-6">
+              <PlaylistCard
+                playlist={data.playlist}
+                video={data.videos[0]}
+                variant="poster"
+              />
+            </div>
+            <UserCard
+              userId={data.user.id}
+              userName={data.user.name}
+              userImage={data.user.image ?? ""}
+              followers={data.user.followers}
+              userHandle={data.user.handle}
+              userEmail={data.user.email}
+            />
+          </div>
         )}
       </div>
       <div className="flex flex-1 basis-[400px] content-start rounded-2xl border p-4">

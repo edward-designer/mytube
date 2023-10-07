@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { type NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -23,13 +23,14 @@ import FollowButton from "@/components/Buttons/FolllowButton";
 import LikeButton from "@/components/Buttons/LikeButton";
 import Comments from "@/components/Comment/Comments";
 import SaveButton from "@/components/Buttons/SaveButton";
+import UserCard from "@/components/Video/UserCard";
 
 const VideoPage: NextPage = () => {
   const router = useRouter();
   const videoId = router.query?.videoId ?? "";
   const { data: sessionData } = useSession();
   const viewerId = sessionData?.user?.id ?? "";
-
+  const playerRef = useRef<null | HTMLElement>(null);
   assertString(videoId);
 
   const {
@@ -59,6 +60,11 @@ const VideoPage: NextPage = () => {
     void refetch();
   }, [videoId, viewerId]);
 
+  useEffect(() => {
+    if (!playerRef.current) return;
+    playerRef.current.scrollIntoView();
+  }, [videoId]);
+
   if (isLoading) return <LoadingMessage />;
   if (
     !(
@@ -86,7 +92,10 @@ const VideoPage: NextPage = () => {
         <title>{videoData?.video.title ?? "Video"}</title>
         <meta name="description" content={video.description ?? ""} />
       </Head>
-      <section className="flex w-full flex-wrap content-start gap-8 overflow-y-auto p-6 lg:p-12">
+      <section
+        ref={playerRef}
+        className="flex w-full flex-wrap content-start gap-8 overflow-y-auto p-6 lg:p-12"
+      >
         <div className="flex-1 grow-[3] basis-[640px]">
           <ReactPlayer
             url={videoURL}
@@ -124,21 +133,14 @@ const VideoPage: NextPage = () => {
               </div>
 
               <div className="flex flex-row place-content-between items-center gap-x-4 ">
-                <Link
-                  href={`/${video.userId}/ProfileVideos`}
-                  key={video.userId}
-                >
-                  <div className="flex flex-row gap-2">
-                    <UserImage image={user.image ?? ""} />
-                    <button className="flex flex-col">
-                      <UserName name={user.name ?? ""} />
-                      <p className=" text-sm text-gray-600">
-                        {user.followers}
-                        <span> Followers</span>
-                      </p>
-                    </button>
-                  </div>
-                </Link>
+                <UserCard
+                  userId={video.userId}
+                  userName={user.name}
+                  userImage={user.image ?? ""}
+                  followers={user.followers}
+                  userHandle={user.handle}
+                  userEmail={user.email}
+                />
                 <FollowButton
                   followingId={video.userId}
                   viewer={{

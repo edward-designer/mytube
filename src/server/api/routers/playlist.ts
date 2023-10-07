@@ -8,33 +8,24 @@ export const playlistRouter = createTRPCRouter({
       z.object({
         userId: z.string(),
         isExpanded: z.boolean().optional(),
-        isHistory: z.boolean().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const playlists = input.isHistory
-        ? await ctx.db.playlist.findMany({
-            where: {
-              userId: input.userId,
-              title: "History",
-            },
-            take: 1,
-          })
-        : await ctx.db.playlist.findMany({
-            where: {
-              userId: input.userId,
-              title: {
-                not: "History",
-              },
-            },
-          });
+      const playlists = await ctx.db.playlist.findMany({
+        where: {
+          userId: input.userId,
+          title: {
+            not: "History",
+          },
+        },
+      });
       const videoIdsArray = await Promise.all(
         playlists.map(async (playlist) => {
           return await ctx.db.playlistHasVideo.findMany({
             where: {
               playlistId: playlist.id,
             },
-            take: input.isHistory ? 60 : input.isExpanded ? 6 : 1,
+            take: input.isExpanded ? 6 : 1,
           });
         }),
       );
@@ -47,9 +38,6 @@ export const playlistRouter = createTRPCRouter({
               id: {
                 in: videoIdsonly,
               },
-            },
-            orderBy: {
-              createdAt: "desc",
             },
             include: {
               user: true,
@@ -120,6 +108,12 @@ export const playlistRouter = createTRPCRouter({
         },
       });
 
+      const followers = await ctx.db.followEngagement.count({
+        where: {
+          followingId: playlist.userId,
+        },
+      });
+
       const videosInPlaylist = await ctx.db.playlistHasVideo.findMany({
         where: {
           playlistId: input.playlistId,
@@ -156,8 +150,56 @@ export const playlistRouter = createTRPCRouter({
 
       return {
         playlist: { ...playlist, count },
-        user,
+        user: { ...user, followers },
         videos: videosWithCounts,
+      };
+    }),
+  getLikedVideos: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const likedVideoId = await ctx.db.videoEngagement.findMany({
+        where: {
+          engagementType: EngagementType.LIKE,
+          userId: input.userId,
+        },
+      });
+
+      const videosWithUser = await Promise.all(
+        likedVideoId.map(async ({ videoId }) => {
+          return await ctx.db.video.findFirstOrThrow({
+            where: {
+              id: videoId,
+            },
+            include: {
+              user: true,
+            },
+          });
+        }),
+      );
+
+      const videosWithCounts = await Promise.all(
+        videosWithUser.map(async (video) => {
+          const views = await ctx.db.videoEngagement.count({
+            where: {
+              videoId: video.id,
+              engagementType: EngagementType.VIEW,
+            },
+          });
+          return {
+            ...video,
+            views,
+          };
+        }),
+      );
+      const videos = videosWithCounts.map(({ user, ...video }) => video);
+      const users = videosWithCounts.map(({ user, ...video }) => user);
+      return {
+        videos,
+        users,
       };
     }),
   getPlaylists: protectedProcedure

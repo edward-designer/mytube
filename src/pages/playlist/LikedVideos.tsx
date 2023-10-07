@@ -1,20 +1,20 @@
 import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import NotAvailable from "@/components/ErrorMessage/NotAvailable";
-import ClockRewind from "@/components/Icons/ClockRewind";
+import ThumbsUp from "@/components/Icons/ThumbsUp";
 import LoadingMessage from "@/components/Loading/Loading";
 import VideoGrid from "@/components/Video/VideoGrid";
 import { api } from "@/utils/api";
 import { assertString } from "@/utils/helpers";
 import { useSession } from "next-auth/react";
 
-const History = () => {
+const LikedVideo = () => {
   const { data: sessionData } = useSession();
   const userId = sessionData?.user.id ?? "";
 
   assertString(userId);
 
   const { data, isLoading, error, refetch } =
-    api.user.getVideosHistoryById.useQuery({
+    api.playlist.getLikedVideos.useQuery({
       userId,
     });
 
@@ -23,32 +23,30 @@ const History = () => {
     return (
       <ErrorMessage
         icon="GreenPlay"
-        message="Error Getting Profile"
-        description="Sorry the requested profile cannot be found."
+        message="Error Getting Liked Videos"
+        description="Sorry the request cannot be fulfilled."
       />
     );
 
-  const videos = data.videosWithCounts.map(({ user, ...video }) => video);
-  const users = data.videosWithCounts.map(({ user }) => user);
   return (
     <div className="flex w-full flex-col">
-      {data && data.videosWithCounts.length > 0 ? (
+      {data && data.videos.length > 0 ? (
         <div className="flex w-full flex-col p-6">
           <section className="mb-4 ">
             <h2 className="-mb-6 pl-8 text-xl font-semibold">
-              <ClockRewind className="mr-2 inline h-5 w-5 shrink-0 stroke-gray-900" />
-              History
+              <ThumbsUp className="mr-2 inline h-5 w-5 shrink-0 stroke-gray-900" />
+              Liked Videos
             </h2>
-            <VideoGrid data={{ videos, users }} />
+            <VideoGrid data={data} />;
           </section>
         </div>
       ) : (
         <div className="flex h-full items-center justify-center">
-          <NotAvailable variant="history" />
+          <NotAvailable variant="liked" />
         </div>
       )}
     </div>
   );
 };
 
-export default History;
+export default LikedVideo;
