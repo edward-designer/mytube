@@ -182,23 +182,14 @@ export const userRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string(),
-        videoId: z.string(),
+        videoId: z.string().optional(),
+        announcementId: z.string().optional(),
         type: z.custom<EngagementType>(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const existingLikeDislike = await ctx.db.videoEngagement.findMany({
-        where: {
-          userId: input.userId,
-          videoId: input.videoId,
-          engagementType: {
-            in: [EngagementType.DISLIKE, EngagementType.LIKE],
-          },
-        },
-      });
-      if (existingLikeDislike.length > 0) {
-        const likeOrDislike = existingLikeDislike[0]?.engagementType;
-        const deleteLikeDisklike = await ctx.db.videoEngagement.deleteMany({
+      if (input.videoId) {
+        const existingLikeDislike = await ctx.db.videoEngagement.findMany({
           where: {
             userId: input.userId,
             videoId: input.videoId,
@@ -207,26 +198,82 @@ export const userRouter = createTRPCRouter({
             },
           },
         });
-        if (likeOrDislike !== input.type) {
-          const addLiskDislike = await ctx.db.videoEngagement.create({
+        if (existingLikeDislike.length > 0) {
+          const likeOrDislike = existingLikeDislike[0]?.engagementType;
+          const deleteLikeDisklike = await ctx.db.videoEngagement.deleteMany({
+            where: {
+              userId: input.userId,
+              videoId: input.videoId,
+              engagementType: {
+                in: [EngagementType.DISLIKE, EngagementType.LIKE],
+              },
+            },
+          });
+          if (likeOrDislike !== input.type) {
+            const addLiskDislike = await ctx.db.videoEngagement.create({
+              data: {
+                userId: input.userId,
+                videoId: input.videoId,
+                engagementType: input.type,
+              },
+            });
+            return addLiskDislike;
+          }
+          return deleteLikeDisklike;
+        } else {
+          const createLike = await ctx.db.videoEngagement.create({
             data: {
               userId: input.userId,
               videoId: input.videoId,
               engagementType: input.type,
             },
           });
-          return addLiskDislike;
+          return createLike;
         }
-        return deleteLikeDisklike;
-      } else {
-        const createLike = await ctx.db.videoEngagement.create({
-          data: {
-            userId: input.userId,
-            videoId: input.videoId,
-            engagementType: input.type,
-          },
-        });
-        return createLike;
+      } else if (input.announcementId) {
+        const existingLikeDislike =
+          await ctx.db.announcementEngagement.findMany({
+            where: {
+              userId: input.userId,
+              announcementId: input.announcementId,
+              engagementType: {
+                in: [EngagementType.DISLIKE, EngagementType.LIKE],
+              },
+            },
+          });
+        if (existingLikeDislike.length > 0) {
+          const likeOrDislike = existingLikeDislike[0]?.engagementType;
+          const deleteLikeDisklike =
+            await ctx.db.announcementEngagement.deleteMany({
+              where: {
+                userId: input.userId,
+                announcementId: input.announcementId,
+                engagementType: {
+                  in: [EngagementType.DISLIKE, EngagementType.LIKE],
+                },
+              },
+            });
+          if (likeOrDislike !== input.type) {
+            const addLiskDislike = await ctx.db.announcementEngagement.create({
+              data: {
+                userId: input.userId,
+                announcementId: input.announcementId,
+                engagementType: input.type,
+              },
+            });
+            return addLiskDislike;
+          }
+          return deleteLikeDisklike;
+        } else {
+          const createLike = await ctx.db.announcementEngagement.create({
+            data: {
+              userId: input.userId,
+              announcementId: input.announcementId,
+              engagementType: input.type,
+            },
+          });
+          return createLike;
+        }
       }
     }),
 });

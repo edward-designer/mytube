@@ -118,6 +118,9 @@ export const playlistRouter = createTRPCRouter({
         where: {
           playlistId: input.playlistId,
         },
+        orderBy: {
+          createdAt: "desc",
+        },
       });
 
       const videosWithUser = await Promise.all(
@@ -165,6 +168,9 @@ export const playlistRouter = createTRPCRouter({
         where: {
           engagementType: EngagementType.LIKE,
           userId: input.userId,
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       });
 

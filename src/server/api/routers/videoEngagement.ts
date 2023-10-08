@@ -39,16 +39,6 @@ export const videoEngagementRouter = createTRPCRouter({
   addViewCount: publicProcedure
     .input(z.object({ id: z.string(), userId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      if (input.userId && input.userId !== "") {
-        const playlist = await getOrCreatePlaylist(
-          ctx,
-          "History",
-          input.userId,
-        );
-        await ctx.db.playlistHasVideo.create({
-          data: { playlistId: playlist.id, videoId: input.id },
-        });
-      }
       const view = await createEngagement(
         ctx,
         input.id,

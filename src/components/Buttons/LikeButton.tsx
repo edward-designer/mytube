@@ -13,7 +13,8 @@ import Button from "./Button";
 import { EngagementType } from "@prisma/client";
 
 interface LikeButton {
-  videoId: string;
+  videoId?: string;
+  announcementId?: string;
   engagement: {
     likes: number;
     dislikes: number;
@@ -26,6 +27,7 @@ interface LikeButton {
 export default function LikeButton({
   videoId,
   engagement,
+  announcementId,
   viewer,
 }: LikeButton) {
   const { data: sessionData } = useSession();
@@ -47,7 +49,8 @@ export default function LikeButton({
 
   const handleLikeDislike = (input: {
     userId: string;
-    videoId: string;
+    videoId?: string;
+    announcementId?: string;
     type: EngagementType;
   }) => {
     const nextUserChoice = { ...userChoice };
@@ -112,7 +115,7 @@ export default function LikeButton({
     setUserChoice(nextUserChoice);
     likeDislikeMutation.mutate(input);
   };
-
+  if (!videoId && !announcementId) return;
   return (
     <>
       <Button
@@ -128,6 +131,7 @@ export default function LikeButton({
                 handleLikeDislike({
                   userId,
                   videoId,
+                  announcementId,
                   type: EngagementType.LIKE,
                 });
               }
@@ -175,6 +179,7 @@ export default function LikeButton({
                 handleLikeDislike({
                   userId,
                   videoId,
+                  announcementId,
                   type: EngagementType.DISLIKE,
                 });
               }

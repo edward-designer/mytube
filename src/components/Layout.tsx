@@ -18,7 +18,7 @@ const Layout = ({ children }: { children: ReactElement }) => {
         <meta name="description" content="A Youtube Clone" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="relative flex h-screen flex-col">
+      <main className="relative flex h-screen flex-col overflow-hidden">
         <Navbar>
           <button
             onClick={() => setIsOpen(!isOpen)}

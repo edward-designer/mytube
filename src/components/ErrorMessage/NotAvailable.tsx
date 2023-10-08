@@ -7,7 +7,13 @@ const NotAvailable = ({
   variant = "video",
 }: {
   userId?: string;
-  variant?: "video" | "playlist" | "history" | "liked" | "following";
+  variant?:
+    | "video"
+    | "playlist"
+    | "history"
+    | "liked"
+    | "following"
+    | "announcement";
 }) => {
   const MESSAGES = {
     video: {
@@ -38,6 +44,11 @@ const NotAvailable = ({
       title: "Have not followed anyone yet",
       description: "Followed creators will be shown here.",
       icon: "GreenPeople",
+    },
+    announcement: {
+      title: "No announcements yet",
+      description: "Published announcements will be shown here",
+      icon: "GreenHorn",
     },
   };
 

@@ -18,7 +18,7 @@ const ProfileTabs = ({ userId, router }: ProfileTabsProps) => {
       path: `/${String(userId)}/ProfilePlaylists`,
     },
     {
-      name: "Annoucements",
+      name: "Announcements",
       path: `/${String(userId)}/ProfileAnnouncements`,
     },
     {

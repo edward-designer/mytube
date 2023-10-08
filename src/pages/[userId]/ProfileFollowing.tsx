@@ -4,7 +4,7 @@ import NoVideosUploaded from "@/components/ErrorMessage/NotAvailable";
 import LoadingMessage from "@/components/Loading/Loading";
 import ProfileHeader from "@/components/ProfileHeader/ProfileHeader";
 import UserCard from "@/components/Video/UserCard";
-import VideoGrid from "@/components/Video/VideoGrid";
+
 import { api } from "@/utils/api";
 import { assertString } from "@/utils/helpers";
 import { useSession } from "next-auth/react";

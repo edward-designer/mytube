@@ -13,12 +13,12 @@ const History = () => {
 
   assertString(userId);
 
-  const { data, isLoading, error, refetch } =
+  const { data, isLoading, isRefetching, error, refetch } =
     api.user.getVideosHistoryById.useQuery({
       userId,
     });
 
-  if (isLoading) return <LoadingMessage />;
+  if (isLoading || isRefetching) return <LoadingMessage />;
   if (!(!error && data))
     return (
       <ErrorMessage
