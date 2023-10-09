@@ -10,6 +10,7 @@ import Button from "./Buttons/Button";
 import { cx } from "@/utils/helpers";
 import { type NavigationItem, getHeaderNavigation } from "@/utils/getData";
 import SearchBar from "./SearchBar/SearchBar";
+import { useEffect, useRef, useState } from "react";
 
 interface NavbarProps {
   children?: JSX.Element;
@@ -18,7 +19,7 @@ interface NavbarProps {
 const Navbar = ({ children }: NavbarProps) => {
   return (
     <>
-      <div className="relative z-50 w-full border border-gray-200 bg-white shadow-sm">
+      <div className="relative z-30 w-full border border-gray-200 bg-white shadow-sm">
         <div className="mx-auto flex max-w-full gap-4 px-6 lg:px-16 ">
           <div className="flex flex-shrink-0 items-center lg:static">
             <Link href="/" aria-label="home">
@@ -50,11 +51,30 @@ const HeaderMenu = () => {
   const { data: sessionData } = useSession();
   const userId = sessionData?.user.id;
   const Navigation = getHeaderNavigation(userId);
+  const [isOpen, setIsOpen] = useState(false);
+  const navRef = useRef<null | HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent | PointerEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node))
+        setIsOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("pointerdown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("pointerdown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
-      <Menu as="div" className="relative mx-2 flex-shrink-0">
+      <Menu ref={navRef} as="div" className="relative mx-2 flex-shrink-0">
         <div>
-          <Menu.Button className="flex rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500">
+          <Menu.Button
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500"
+          >
             {sessionData ? (
               <UserImage image={sessionData?.user.image ?? ""} />
             ) : (
@@ -63,6 +83,7 @@ const HeaderMenu = () => {
           </Menu.Button>
         </div>
         <Transition
+          show={isOpen}
           enter="transition duration-100 ease-out"
           enterFrom="transform scale-95 opacity-0"
           enterTo="transform scale-100 opacity-100"
@@ -98,6 +119,7 @@ const HeaderMenu = () => {
                 key={item.name}
                 item={item}
                 underlined={["Terms of Service", "Log Out"]}
+                callback={() => setIsOpen(false)}
               />
             ))}
           </Menu.Items>
@@ -124,22 +146,24 @@ const HeaderMenu = () => {
 interface MenuItemProps {
   item: NavigationItem;
   underlined: string[];
+  callback?: () => void;
 }
 
-const MenuItem = ({ item, underlined }: MenuItemProps) => {
+const MenuItem = ({ item, underlined, callback }: MenuItemProps) => {
   return (
     <Menu.Item>
       {({ active }) => (
         <Link
           onClick={(e) => {
             e.preventDefault();
+            if (callback) callback();
             if (item.path === "sign-out") {
               void signOut();
             } else {
               void router.push(item.path ?? "/");
             }
           }}
-          href={item.path ?? "/"}
+          href={item.path === "sign-out" ? "/" : item.path ?? "/"}
           className={cx([
             active ? "bg-gray-100" : "",
             underlined.includes(item.name) ? "border-gray:200 border-t" : "",

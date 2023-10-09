@@ -63,7 +63,7 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const user = await ctx.db.user.findUniqueOrThrow({
+      const user = await ctx.db.user.findUnique({
         where: {
           id: input.id,
         },
@@ -275,5 +275,26 @@ export const userRouter = createTRPCRouter({
           return createLike;
         }
       }
+    }),
+
+  updateProfile: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        name: z.string().optional(),
+        email: z.string().optional(),
+        image: z.string().optional(),
+        backgroundImage: z.string().optional(),
+        handle: z.string().optional(),
+        description: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { userId, ...updateData } = input;
+      const result = await ctx.db.user.update({
+        where: { id: userId },
+        data: { ...updateData },
+      });
+      return result;
     }),
 });

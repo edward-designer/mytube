@@ -53,7 +53,7 @@ const ProfileHeader = () => {
   return (
     <>
       <Head>
-        <title>Export {channel.name ?? "Video"} Channel</title>
+        <title>{channel.name ?? "Video"} Channel</title>
         <meta name="description" content={channel.description ?? ""} />
       </Head>
       <div className="flex w-full flex-col">

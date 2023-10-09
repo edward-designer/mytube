@@ -61,8 +61,7 @@ const VideoPage: NextPage = () => {
   }, [videoId, viewerId]);
 
   useEffect(() => {
-    if (!playerRef.current) return;
-    playerRef.current.scrollIntoView();
+    if (playerRef.current) playerRef.current.scrollIntoView();
   }, [videoId]);
 
   if (isLoading) return <LoadingMessage />;

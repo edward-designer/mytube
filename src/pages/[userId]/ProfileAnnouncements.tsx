@@ -7,6 +7,7 @@ import ProfileHeader from "@/components/ProfileHeader/ProfileHeader";
 import { api } from "@/utils/api";
 import { assertString } from "@/utils/helpers";
 import { useSession } from "next-auth/react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 
 const ProfileAnnouncement = () => {
@@ -52,33 +53,38 @@ const ProfileAnnouncement = () => {
     );
 
   return (
-    <div className="flex w-full flex-col">
-      <ProfileHeader />
-      {viewerId === userId && (
-        <div className="mx-8 m-4 ">
-          <InputBox
-            addHandler={addAnnouncement}
-            refetch={refetch}
-            placeholderText="Announcement"
-          />
-        </div>
-      )}
-      {data.length > 0 ? (
-        <div className="-mt-8 flex flex-col p-8">
-          {data.map(({ user, ...message }) => (
-            <AnnouncementCard
-              user={user}
-              announcement={message}
-              key={message.id}
+    <>
+      <Head>
+        <title>Announcement</title>
+      </Head>
+      <div className="flex w-full flex-col">
+        <ProfileHeader />
+        {viewerId === userId && (
+          <div className="m-4 mx-8 ">
+            <InputBox
+              addHandler={addAnnouncement}
+              refetch={refetch}
+              placeholderText="Announcement"
             />
-          ))}
-        </div>
-      ) : (
-        <div className="flex h-full items-center justify-center">
-          <NoVideosUploaded variant="announcement" />
-        </div>
-      )}
-    </div>
+          </div>
+        )}
+        {data.length > 0 ? (
+          <div className="-mt-8 flex flex-col p-8">
+            {data.map(({ user, ...message }) => (
+              <AnnouncementCard
+                user={user}
+                announcement={message}
+                key={message.id}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex h-full items-center justify-center">
+            <NoVideosUploaded variant="announcement" />
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

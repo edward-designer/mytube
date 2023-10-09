@@ -14,7 +14,7 @@ const Footer = () => {
 
   const footerNavigation = getFooterNavigation(userId);
   return (
-    <ul className="flex w-full flex-row border-t shadow-xl text-xs">
+    <ul className="flex w-full flex-row border-t text-xs shadow-xl">
       {footerNavigation.map((item) => (
         <FooterItem key={item.name} item={item} router={router} />
       ))}
@@ -35,7 +35,7 @@ const FooterItem = ({ item, router }: NavItemProps) => {
   return (
     <li className="flex-1 p-4">
       <Link
-        href="#"
+        href={item.path ?? "/"}
         onClick={() => {
           void router.push(item.path ?? "/");
         }}

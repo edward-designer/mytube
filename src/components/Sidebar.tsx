@@ -14,6 +14,7 @@ import { Button } from "./Buttons";
 import { Logo } from "./Icons/Logo";
 import UserImage from "./Video/UserImage";
 import LogOut from "./Icons/LogOut";
+import { useEffect, useRef } from "react";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -109,7 +110,26 @@ const MobileMenu = ({
   const router = useRouter();
   const { data: sessionData } = useSession();
   const userId = sessionData?.user.id;
+
+  const mobileMenuRef = useRef<null | HTMLDivElement>(null);
   const mobileNavigation = getMobileNavigation(userId);
+
+  useEffect(() => {
+    const handleMouseDown = (e: Event) => {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(e.target as Node)
+      ) {
+        closeSidebar();
+      }
+    };
+    document.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener("touchdown", handleMouseDown);
+    return () => {
+      document.removeEventListener("mousedown", handleMouseDown);
+      document.removeEventListener("touchdown", handleMouseDown);
+    };
+  }, [closeSidebar]);
 
   return (
     <Transition show={isOpen} className="absolute inset-0 z-50 lg:hidden">
@@ -131,7 +151,10 @@ const MobileMenu = ({
         leaveFrom="translate-x-0"
         leaveTo="-translate-x-full"
       >
-        <div className="fixed flex h-screen w-80 bg-white px-4">
+        <div
+          ref={mobileMenuRef}
+          className="fixed flex h-screen w-80 bg-white px-4"
+        >
           <Button
             onClick={closeSidebar}
             className="absolute right-0 translate-x-full rounded-none"
@@ -260,7 +283,7 @@ const NavItem = ({
   return (
     <li>
       <Link
-        href="#"
+        href={item.path ?? "/"}
         onFocus={() => setExpandSideBar?.(true)}
         onClick={(e) => {
           e.preventDefault();

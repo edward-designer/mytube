@@ -1,4 +1,4 @@
-import { useState, type ReactElement } from "react";
+import { useState, type ReactElement, useCallback } from "react";
 import Head from "next/head";
 
 import { Navbar, Sidebar } from "@/components";
@@ -9,7 +9,7 @@ const Layout = ({ children }: { children: ReactElement }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [expandSideBar, setExpandSideBar] = useState(false);
   const setSidebarOpen = () => setIsOpen(true);
-  const closeSidebar = () => setIsOpen(false);
+  const closeSidebar = useCallback(() => setIsOpen(false), []);
 
   return (
     <>

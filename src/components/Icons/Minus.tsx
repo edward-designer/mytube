@@ -1,4 +1,4 @@
-export default function Plus(props: React.SVGProps<SVGSVGElement>) {
+export default function Minus(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -7,7 +7,7 @@ export default function Plus(props: React.SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M10.5 4.1665V15.8332M4.66663 9.99984H16.3333"
+        d="M4.66663 9.99984H16.3333"
         strokeWidth="1.66667"
         strokeLinecap="round"
         strokeLinejoin="round"
