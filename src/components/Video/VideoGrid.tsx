@@ -49,7 +49,7 @@ const VideoGrid = ({
   return (
     <div
       className={cx([
-        "w-full gap-8",
+        "w-full content-start gap-8",
         variant === "aside"
           ? "flex flex-wrap content-start gap-y-4 [&>*]:flex-1 [&>*]:basis-[350px]"
           : "",

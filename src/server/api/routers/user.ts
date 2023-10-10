@@ -3,6 +3,78 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
+  getDashboardData: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findUnique({
+        where: {
+          id: input,
+        },
+        include: {
+          videos: {
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
+        },
+      });
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const videosWithCounts = await Promise.all(
+        user.videos.map(async (video) => {
+          const likes = await ctx.db.videoEngagement.count({
+            where: {
+              videoId: video.id,
+              engagementType: EngagementType.LIKE,
+            },
+          });
+          const dislikes = await ctx.db.videoEngagement.count({
+            where: {
+              videoId: video.id,
+              engagementType: EngagementType.DISLIKE,
+            },
+          });
+          const views = await ctx.db.videoEngagement.count({
+            where: {
+              videoId: video.id,
+              engagementType: EngagementType.VIEW,
+            },
+          });
+          return {
+            ...video,
+            likes,
+            dislikes,
+            views,
+          };
+        }),
+      );
+
+      const totalLikes = videosWithCounts.reduce(
+        (total, video) => total + video.likes,
+        0,
+      );
+      const totalViews = videosWithCounts.reduce(
+        (total, video) => total + video.views,
+        0,
+      );
+
+      const totalFollowers = await ctx.db.followEngagement.count({
+        where: {
+          followingId: user.id,
+        },
+      });
+
+      return {
+        user,
+        totalFollowers,
+        videos: videosWithCounts,
+        totalLikes,
+        totalViews,
+      };
+    }),
   getVideosHistoryById: protectedProcedure
     .input(
       z.object({

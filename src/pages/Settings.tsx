@@ -58,14 +58,14 @@ const Settings = () => {
 
   const [profileImage] = useImageUpload({
     name: "image",
-    userId,
+    id: userId,
     refetch,
     initialFile: data?.user?.image ?? "",
   });
 
   const [profileBackground] = useImageUpload({
     name: "backgroundImage",
-    userId,
+    id: userId,
     refetch,
     initialFile: data?.user?.backgroundImage ?? "/background.jpg",
     aspectRatio: 2 / 1,

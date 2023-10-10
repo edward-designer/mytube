@@ -16,27 +16,48 @@ export interface UserData {
   description?: string | undefined;
 }
 
+export interface VideoData {
+  id: string;
+  thumbnailUrl?: string;
+  title?: string;
+  description?: string;
+  videoUrl?: string;
+  publish?: boolean;
+}
+
 const useImageUpload = ({
   name,
-  userId,
+  id,
   refetch,
   initialFile,
   aspectRatio = 1 / 1,
 }: {
-  name: "image" | "backgroundImage";
-  userId: string;
+  name: "image" | "backgroundImage" | "thumbnailUrl";
+  id: string;
   refetch: () => Promise<unknown>;
   initialFile: string;
   aspectRatio?: number;
 }) => {
   const userDataMutation = api.user.updateProfile.useMutation();
+  const videoDataMutation = api.video.updateVideoById.useMutation();
+
   const handleImageUpdate = (url: string, cb: () => void) => {
-    const userData: UserData = { userId, [name]: url };
-    userDataMutation.mutate(userData, {
-      onSuccess: () => {
-        void refetch().then(void cb());
-      },
-    });
+    if (name === "thumbnailUrl") {
+      const videoData: VideoData = { id, [name]: url };
+      videoDataMutation.mutate(videoData, {
+        onSuccess: () => {
+          void refetch().then(void cb());
+        },
+      });
+    }
+    if (name === "backgroundImage" || name === "image") {
+      const userData: UserData = { userId: id, [name]: url };
+      userDataMutation.mutate(userData, {
+        onSuccess: () => {
+          void refetch().then(void cb());
+        },
+      });
+    }
   };
 
   const [orgImage, setOrgImage] = useState<string>(initialFile);
@@ -56,12 +77,24 @@ const useImageUpload = ({
     const url = await uploadImage(data);
     handleImageUpdate(url, () => {
       setOrgImage(url);
-      setIsUploading(false);
+      void preloadImage(url);
     });
   };
 
   const onCancel = () => {
     setUseCrop(false);
+  };
+
+  const preloadImage = async (imageURL: string): Promise<void> => {
+    const loadImage = (URL: string): Promise<boolean> =>
+      new Promise((resolve, reject) => {
+        const image = new Image();
+        image.src = URL;
+        image.onload = () => resolve(true);
+        image.onerror = reject;
+      });
+    const loaded = await loadImage(imageURL);
+    if (loaded) setIsUploading(false);
   };
 
   const uploadImage = async (image: string) => {

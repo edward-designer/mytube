@@ -12,6 +12,130 @@ import {
 } from "@/server/api/trpc";
 
 export const videoRouter = createTRPCRouter({
+  addVideo: protectedProcedure
+    .input(
+      z.object({
+        title: z.string().optional(),
+        thumbnailUrl: z.string().optional(),
+        description: z.string().optional(),
+        videoUrl: z.string().optional(),
+        publish: z.boolean().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const videoUrl = input.videoUrl;
+      const thumbnailUrl =
+        videoUrl?.substring(0, videoUrl?.lastIndexOf(".")) + ".jpg";
+      const publish = false;
+      const video = await ctx.db.video.create({
+        data: { userId, videoUrl, thumbnailUrl, publish },
+      });
+      return video;
+    }),
+
+  updateVideoById: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string().optional(),
+        thumbnailUrl: z.string().optional(),
+        description: z.string().optional(),
+        videoUrl: z.string().optional(),
+        publish: z.boolean().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const { id, ...updateData } = input;
+      await ctx.db.video.update({
+        data: { ...updateData },
+        where: {
+          id,
+          userId,
+        },
+      });
+    }),
+
+  deleteVideoById: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const video = await ctx.db.video.delete({
+        where: {
+          id: input.id,
+          userId,
+        },
+      });
+      if (video) {
+        await ctx.db.videoEngagement.deleteMany({
+          where: {
+            videoId: input.id,
+          },
+        });
+        await ctx.db.playlistHasVideo.deleteMany({
+          where: {
+            videoId: input.id,
+          },
+        });
+        await ctx.db.comment.deleteMany({
+          where: {
+            videoId: input.id,
+          },
+        });
+      }
+    }),
+  getVideoByKeyword: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const videosWithUser = await ctx.db.video.findMany({
+        where: {
+          AND: [
+            { publish: true },
+            {
+              OR: [
+                {
+                  description: {
+                    contains: input,
+                  },
+                },
+                {
+                  title: {
+                    contains: input,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        include: {
+          user: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      const videos = videosWithUser.map(({ user, ...video }) => video);
+      const users = videosWithUser.map(({ user }) => user);
+
+      const videosWithCounts = await Promise.all(
+        videos.map(async (video) => {
+          const views = await ctx.db.videoEngagement.count({
+            where: {
+              videoId: video.id,
+              engagementType: EngagementType.VIEW,
+            },
+          });
+          return {
+            ...video,
+            views,
+          };
+        }),
+      );
+
+      return { videos: videosWithCounts, users };
+    }),
   getVideoById: publicProcedure
     .input(
       z.object({

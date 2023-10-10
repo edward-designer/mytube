@@ -23,12 +23,14 @@ interface LikeButton {
     hasLiked: boolean;
     hasDisliked: boolean;
   };
+  disabled?: boolean;
 }
 export default function LikeButton({
   videoId,
   engagement,
   announcementId,
   viewer,
+  disabled = false,
 }: LikeButton) {
   const { data: sessionData } = useSession();
   const userId = sessionData?.user.id ?? "";
@@ -119,6 +121,7 @@ export default function LikeButton({
   return (
     <>
       <Button
+        disabled={disabled}
         variant={
           userChoice.userEngagement === EngagementType.LIKE
             ? "secondary-gray"
@@ -167,6 +170,7 @@ export default function LikeButton({
         <span aria-label="number of likes">{userChoice.likes}</span>
       </Button>
       <Button
+        disabled={disabled}
         variant={
           userChoice.userEngagement === EngagementType.DISLIKE
             ? "secondary-gray"

@@ -1,0 +1,43 @@
+import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
+import LoadingMessage from "@/components/Loading/Loading";
+import VideoGrid from "@/components/Video/VideoGrid";
+import { api } from "@/utils/api";
+import { useSearchParams } from "next/navigation";
+
+const SearchPage = () => {
+  const searchParams = useSearchParams();
+  const search = searchParams.get("q") ?? "";
+
+  const { data, isLoading, refetch, error } =
+    api.video.getVideoByKeyword.useQuery(search);
+
+  const Message = () => {
+    if (isLoading) return <LoadingMessage />;
+    if (!data || data.videos.length === 0)
+      return (
+        <ErrorMessage
+          icon="GreenPlay"
+          message="No Videos"
+          description="Sorry there are no videos to show at the moment."
+        />
+      );
+    if (error)
+      return (
+        <ErrorMessage
+          icon="GreenPlay"
+          message="Error"
+          description={error.message}
+        />
+      );
+  };
+  console.log(data);
+  return data?.videos && data?.users && data.videos.length !== 0 ? (
+    <VideoGrid data={data} />
+  ) : (
+    <div className="flex h-full w-full items-center justify-center">
+      <Message />
+    </div>
+  );
+};
+
+export default SearchPage;
