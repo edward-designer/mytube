@@ -27,13 +27,7 @@ const Playlist = () => {
     if (playlistId) void refetch();
   }, [playlistId, refetch]);
 
-  if (isLoading)
-    return (
-      <div>
-        {playlistId}
-        <LoadingMessage />
-      </div>
-    );
+  if (isLoading) return <LoadingMessage />;
   if (!(!error && data))
     return (
       <div className="flex h-full w-full items-center justify-center">
