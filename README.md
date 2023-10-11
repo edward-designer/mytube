@@ -1,4 +1,4 @@
-# myTube - full stack video streaming app
+# [myTube](https://mytubeuk.vercel.app/)- full stack video streaming app
 
 The myTube App is a full stack video streaming app similar to YouTube created using the [T3 Stack](https://create.t3.gg/) featuring the following technologies:
 
@@ -19,22 +19,28 @@ Online platform used:
 ## Features of the myTube App
 
 ### Video Browsing
-
+- Homepage
 ![homepage](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-home.gif)
+- Video
 ![video streaming](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-video.gif)
 
 ### Image/Video Uploading and Adding Metadata
-
-![dashboard](https://drive.google.com/file/d/1EsfvLD8pd2QtD1KCjmMCabj5pfaKXPvC/preview)
-![video upload](https://drive.google.com/file/d/1yVwSM-1WxFkViTWeYyNA2nElTy1Zy1RP/preview)
-![image upload](https://drive.google.com/file/d/1F0_b7q-gFldwOm2C9M72X5GyEja8OdXb/preview)
+- Dashboard
+![dashboard](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-dashboard.gif)
+- Video Upload
+![video upload](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-uploadVideo.gif)
+- Image Upload
+![image upload](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-uploadImage.gif)
 
 ### Interactions - like/unlike/comment/add to playlists/follow
-
-![like, unlik, follow](https://drive.google.com/file/d/1XPec3hNdgayvyrJcHH2OboDIbAxt02bU/preview)
-![add to playlist](https://drive.google.com/file/d/1i_dAKw-IE2BNbd8Po-MzWTgtlGhQUYIr/preview)
-![adding comments](https://drive.google.com/file/d/12R3OKsdwdBOvP3g8PBq2sIcIpcaWlMRl/preview)
-![likes and history](https://drive.google.com/file/d/1PJbsJ0VZGsIbd2xn76paUbTpwt4tSAjx/preview)
+- Like, Unlike and Follow
+![like, unlik, follow](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-like.gif)
+- Add Video to Playlist
+![add to playlist](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-playlist.gif)
+- Add Comments
+![adding comments](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-comment.gif)
+- Liked Video and History
+![likes and history](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-history.gif)
 
 ## Installation
 
