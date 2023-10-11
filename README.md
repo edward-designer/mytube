@@ -16,6 +16,24 @@ Online platform used:
 - database: [PlanetScale](https://app.planetscale.com/)
 - Video/Image: [Cloudinary](https://cloudinary.com/)
 
+This app is based on the [tutorial by Jerome McCree](https://www.vidchill.org/) with lots of customizations and enhancements:
+ - **UX of image/video upload / update**
+   -- steps of video upload
+   -- use of auto-generated video thumbnail
+   -- debounced auto save of video meta data
+   -- image upload hook
+   -- error handling
+ - **UX of user input**
+   -- partial hiding of long video descriptions
+   -- auto expansion of textarea height based on input length
+ - **Visual design**
+   -- auto minimize of sidebar
+   -- animated like/dislike icons
+   -- responsive layout
+   -- History and Liked pages
+ - **Security**
+   -- userId is got directly from db rather than supplying through API payload    
+
 ## Features of the myTube App
 
 ### Video Browsing
