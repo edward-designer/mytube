@@ -135,7 +135,7 @@ const useImageUpload = ({
     useCrop && (
       <>
         <div className="fixed inset-0 z-40 h-full w-full bg-black/70 " />
-        <div className="fixed z-50 ml-[50%] mt-6 -translate-x-[50%] bg-white/90 p-[3vw] shadow-lg">
+        <div className="fixed left-0 top-0 z-50 ml-[50%] mt-6 -translate-x-[50%] bg-white/90 p-[3vw] shadow-lg">
           <Cropper
             src={
               uploadFile instanceof File

@@ -1,28 +1,80 @@
-# Create T3 App
+# myTube - full stack video streaming app
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+The myTube App is a full stack video streaming app similar to YouTube created using the [T3 Stack](https://create.t3.gg/) featuring the following technologies:
 
-## What's next? How do I make an app with this?
+- Next.js
+- NextAuth.js
+- Prisma
+- Tailwind CSS
+- tRPC
+- React Query
+- TypeScript
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+Online platform used:
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- hosting: [Vercel](https://vercel.com/)
+- database: [PlanetScale](https://app.planetscale.com/)
+- Video/Image: [Cloudinary](https://cloudinary.com/)
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Features of the myTube App
 
-## Learn More
+### Video Browsing
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### Interactions - like/unlike/comment/add to playlists/follow
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### Video Uploading and Adding Metadata
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Installation
 
-## How do I deploy this?
+1. Clone the project repository and pull to local environment
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+2. Create a `.env` file in the root directory and add the following
+
+```
+# Prisma
+# https://www.prisma.io/docs/reference/database-reference/connection-urls#env
+# Create an account on [PlanetScale](https://app.planetscale.com/) and create a new database (for storing user and video data)
+DATABASE_URL=''
+
+# Next Auth
+# You can generate a new secret on the command line with:
+# openssl rand -base64 32
+# https://next-auth.js.org/configuration/options#secret
+NEXTAUTH_SECRET=""
+NEXTAUTH_URL="http://localhost:3000"
+
+# Next Auth Email Provider (to send out emails with magic links for logging in)
+EMAIL_SERVER_USER=""
+EMAIL_SERVER_PASSWORD=""
+EMAIL_SERVER_HOST=""
+EMAIL_SERVER_PORT=
+EMAIL_FROM=""
+
+# Cloudinary
+# Create an cloudinary account and get the public name (for storage of video/image uploads)
+NEXT_PUBLIC_CLOUDINARY_NAME="deh6cggus"
+
+```
+
+3. Set up the database and send the dummy data
+
+```
+npm run db:push
+npm run postinstall
+npx prisma db seed
+
+```
+
+4. Install dependencies and run the dev server
+
+```
+npm install
+npm run dev
+
+```
+
+5. For the database client Prisma Studio, run the following command:
+
+```
+npx prisma studio
+```
