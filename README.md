@@ -20,7 +20,7 @@ Online platform used:
 
 ### Video Browsing
 
-![homepage](https://drive.google.com/file/d/1yf-jp9U2Al4PgNnSzIuDDSX4P9KdbGIu/preview)
+![homepage](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaAYg-5cA8kF83CU_tkK9JSdXj5sdzDaKf6u0MAnwVDLe8ZESeKFYLISp06Fu9U3UaVrzAxpzib6MvN5iebkEIZ2IeFCxg=w2475-h1824)
 ![video streaming](https://drive.google.com/file/d/12aglSTmOirb6VGTFSuUyfxbW4FG1UQe9/preview)
 
 ### Image/Video Uploading and Adding Metadata
