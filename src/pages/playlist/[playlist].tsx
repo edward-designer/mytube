@@ -11,10 +11,10 @@ import { useEffect } from "react";
 
 const Playlist = () => {
   const router = useRouter();
-  const playlistId = router.query?.playlistId ?? "";
+  const playlistId = router.query?.playlist ?? "";
 
   assertString(playlistId);
-  console.log(router.query);
+
   const { data, isLoading, error, refetch } =
     api.playlist.getVideosByPlaylistId.useQuery(
       {
@@ -24,7 +24,6 @@ const Playlist = () => {
     );
 
   useEffect(() => {
-    console.log(router.query, "2");
     if (playlistId) void refetch();
   }, [playlistId, refetch]);
 
