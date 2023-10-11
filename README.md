@@ -20,8 +20,8 @@ Online platform used:
 
 ### Video Browsing
 
-![homepage](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaAYg-5cA8kF83CU_tkK9JSdXj5sdzDaKf6u0MAnwVDLe8ZESeKFYLISp06Fu9U3UaVrzAxpzib6MvN5iebkEIZ2IeFCxg=w2475-h1824)
-![video streaming](https://drive.google.com/file/d/12aglSTmOirb6VGTFSuUyfxbW4FG1UQe9/preview)
+![homepage](https://res.cloudinary.com/deh6cggus/image/upload/v1697037666/github/e59ytctxm7va5ivz4yev.gif)
+![video streaming](https://res.cloudinary.com/deh6cggus/image/upload/v1697037667/github/zj3u3wlkucnbomotyphw.gif)
 
 ### Image/Video Uploading and Adding Metadata
 
