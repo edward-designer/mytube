@@ -14,7 +14,7 @@ const Playlist = () => {
   const playlistId = router.query?.playlistId ?? "";
 
   assertString(playlistId);
-
+  console.log(playlistId);
   const { data, isLoading, error, refetch } =
     api.playlist.getVideosByPlaylistId.useQuery(
       {
@@ -24,6 +24,7 @@ const Playlist = () => {
     );
 
   useEffect(() => {
+    console.log(playlistId);
     if (playlistId) void refetch();
   }, [playlistId, refetch]);
 
