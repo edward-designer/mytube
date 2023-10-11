@@ -20,9 +20,21 @@ Online platform used:
 
 ### Video Browsing
 
+![homepage](https://drive.google.com/file/d/1yf-jp9U2Al4PgNnSzIuDDSX4P9KdbGIu/preview)
+![video streaming](https://drive.google.com/file/d/12aglSTmOirb6VGTFSuUyfxbW4FG1UQe9/preview)
+
+### Image/Video Uploading and Adding Metadata
+
+![dashboard](https://drive.google.com/file/d/1EsfvLD8pd2QtD1KCjmMCabj5pfaKXPvC/preview)
+![video upload](https://drive.google.com/file/d/1yVwSM-1WxFkViTWeYyNA2nElTy1Zy1RP/preview)
+![image upload](https://drive.google.com/file/d/1F0_b7q-gFldwOm2C9M72X5GyEja8OdXb/preview)
+
 ### Interactions - like/unlike/comment/add to playlists/follow
 
-### Video Uploading and Adding Metadata
+![like, unlik, follow](https://drive.google.com/file/d/1XPec3hNdgayvyrJcHH2OboDIbAxt02bU/preview)
+![add to playlist](https://drive.google.com/file/d/1i_dAKw-IE2BNbd8Po-MzWTgtlGhQUYIr/preview)
+![adding comments](https://drive.google.com/file/d/12R3OKsdwdBOvP3g8PBq2sIcIpcaWlMRl/preview)
+![likes and history](https://drive.google.com/file/d/1PJbsJ0VZGsIbd2xn76paUbTpwt4tSAjx/preview)
 
 ## Installation
 
