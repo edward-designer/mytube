@@ -54,7 +54,7 @@ const VideoPage: NextPage = () => {
   };
 
   useEffect(() => {
-    if (videoId !== "" && viewerId !== "") void refetch();
+    if (videoId !== "") void refetch();
   }, [videoId, viewerId]);
 
   useEffect(() => {
