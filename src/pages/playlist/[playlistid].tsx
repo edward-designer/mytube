@@ -25,9 +25,15 @@ const Playlist = () => {
 
   useEffect(() => {
     if (playlistId) void refetch();
-  }, [playlistId]);
+  }, [playlistId, refetch]);
 
-  if (isLoading) return <LoadingMessage />;
+  if (isLoading)
+    return (
+      <div>
+        {playlistId}
+        <LoadingMessage />
+      </div>
+    );
   if (!(!error && data))
     return (
       <div className="flex h-full w-full items-center justify-center">
@@ -39,6 +45,7 @@ const Playlist = () => {
     videos: data.videos.map(({ user, ...video }) => video),
     users: data.videos.map(({ user }) => user),
   };
+
   return (
     <div className="flex w-full flex-row flex-wrap gap-10 p-10">
       <div className="flex flex-1 basis-[400px]">

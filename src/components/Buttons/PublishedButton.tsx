@@ -13,16 +13,20 @@ const PublishedButton = ({
   const UUID = useId();
   const [hasPublished, setHasPublished] = useState(isPublished);
   const togglePublishedMutation = api.video.updateVideoById.useMutation();
-  const handleChange = () =>
+  const handleChange = () => {
+    void setHasPublished(!hasPublished);
     togglePublishedMutation.mutate(
       { id: videoId, publish: !isPublished },
       {
         onSuccess: () => {
           void refetch();
-          void setHasPublished(!hasPublished);
+        },
+        onError: () => {
+          void setHasPublished(hasPublished);
         },
       },
     );
+  };
 
   if (!videoId) return;
   return (
