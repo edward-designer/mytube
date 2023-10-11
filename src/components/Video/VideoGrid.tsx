@@ -54,7 +54,7 @@ const VideoGrid = ({
           ? "flex flex-wrap content-start gap-y-4 [&>*]:flex-1 [&>*]:basis-[350px]"
           : "",
         variant === "home"
-          ? "grid grid-cols-1 gap-y-12 p-12 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+          ? "grid grid-cols-1 gap-y-6 p-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-y-12 lg:p-12 2xl:grid-cols-4"
           : "",
       ])}
     >
@@ -113,6 +113,7 @@ const VideoCard = ({
         <div
           className={cx([
             variant === "aside" ? "flex-shrink-0 basis-1/2" : "max-w-xl",
+            "-mt-3 lg:mt-0",
           ])}
         >
           <div
@@ -149,8 +150,8 @@ export const VideoTitle = ({
 }) => {
   return (
     <h1
-      className={`font-semibold leading-6 text-gray-900 group-hover:text-gray-600 ${
-        limitSize ? "text-base" : "text-lg"
+      className={`font-semibold leading-4 text-gray-900 group-hover:text-gray-600 lg:leading-6 ${
+        limitSize ? "text-base" : "text-base lg:text-lg"
       } ${
         limitHeight
           ? "line-clamp-2 max-h-12 w-full max-w-md overflow-hidden"
@@ -262,7 +263,7 @@ export const UserImage = ({
 
 export const UserName = ({ name }: { name: string }) => {
   return (
-    <p className="max-h-6 overflow-hidden text-sm font-semibold leading-6 text-gray-900">
+    <p className=" max-h-6 overflow-hidden text-left text-sm font-semibold leading-6 text-gray-900">
       {name}
     </p>
   );

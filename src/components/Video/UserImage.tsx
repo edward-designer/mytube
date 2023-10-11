@@ -8,7 +8,7 @@ export default function UserImage({
   className?: string;
 }) {
   return (
-    <div className={`relative h-10 w-10 ${className}`}>
+    <div className={`relative h-10 w-10 shrink-0 ${className}`}>
       <Image
         src={image || "/profile.jpg"}
         alt="Profile Picture"

@@ -20,14 +20,14 @@ const Navbar = ({ children }: NavbarProps) => {
   return (
     <>
       <div className="relative z-30 w-full border border-gray-200 bg-white shadow-sm">
-        <div className="mx-auto flex max-w-full gap-4 px-6 lg:px-16 ">
+        <div className="mx-auto flex max-w-full lg:gap-4 px-2 lg:px-16 ">
           <div className="flex flex-shrink-0 items-center lg:static">
             <Link href="/" aria-label="home">
               <Logo className="h-10" />
             </Link>
           </div>
           <div className="w-full min-w-0 flex-1 lg:px-0">
-            <div className=" g:mx-0 flex items-center py-4 pl-6 ">
+            <div className=" g:mx-0 flex items-center py-4 lg:pl-6">
               <div className="flex w-full flex-row">
                 <div className="flex flex-1 items-center pl-4">
                   <SearchBar />

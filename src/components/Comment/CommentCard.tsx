@@ -22,9 +22,14 @@ const CommentCard = ({ user, comment }: Comment) => {
       <Link href={`/${user.id}/ProfileVideos`}>
         <UserImage image={user?.image ?? ""} />
       </Link>
-      <div>
-        <div className="text-base font-semibold leading-6">
-          <Link href={`/${user.id}/ProfileVideos`}>{user.handle}</Link>
+      <div className="max-w-[200px] md:max-w-full">
+        <div className="flex flex-col text-base font-semibold leading-6 lg:block">
+          <Link
+            href={`/${user.id}/ProfileVideos`}
+            className="max-w-full overflow-hidden text-ellipsis"
+          >
+            {user.handle}
+          </Link>
           <div className="ml-4 inline font-light ">
             {moment(comment.createdAt).fromNow()}
           </div>
