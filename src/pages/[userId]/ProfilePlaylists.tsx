@@ -48,38 +48,44 @@ const ProfilePlaylists = () => {
   return (
     <div className="flex w-full flex-col">
       <ProfileHeader />
-      <div className="px-8">
-        <Button
-          variant="secondary-white"
-          className="aspect-square rounded-l-lg rounded-r-none"
-          disabled={!isExpanded}
-          onClick={() => setIsExpanded(false)}
-        >
-          <Lottie
-            animationData={List}
-            play={false}
-            loop={false}
-            className="h-8 w-8"
-            goTo={0}
-          />
-          <span className="sr-only">Condensed</span>
-        </Button>
-        <Button
-          variant="secondary-white"
-          className="aspect-square rounded-l-none rounded-r-lg"
-          disabled={isExpanded}
-          onClick={() => setIsExpanded(true)}
-        >
-          <span className="sr-only">Expanded</span>
-          <Lottie
-            animationData={List}
-            play={false}
-            loop={false}
-            className="h-8 w-8"
-            goTo={30}
-          />
-        </Button>
-      </div>
+      {data.playlistData.length === 0 ? (
+        <div className="flex flex-1 self-center">
+          <NotAvailable variant="playlist" />
+        </div>
+      ) : (
+        <div className="px-8">
+          <Button
+            variant="secondary-white"
+            className="aspect-square rounded-l-lg rounded-r-none"
+            disabled={!isExpanded}
+            onClick={() => setIsExpanded(false)}
+          >
+            <Lottie
+              animationData={List}
+              play={false}
+              loop={false}
+              className="h-8 w-8"
+              goTo={0}
+            />
+            <span className="sr-only">Condensed</span>
+          </Button>
+          <Button
+            variant="secondary-white"
+            className="aspect-square rounded-l-none rounded-r-lg"
+            disabled={isExpanded}
+            onClick={() => setIsExpanded(true)}
+          >
+            <span className="sr-only">Expanded</span>
+            <Lottie
+              animationData={List}
+              play={false}
+              loop={false}
+              className="h-8 w-8"
+              goTo={30}
+            />
+          </Button>
+        </div>
+      )}
       {isExpanded ? (
         <div className="flex w-full flex-col py-6">
           {data.playlistData.map(({ playlist, videos, users }) => {

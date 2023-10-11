@@ -64,8 +64,8 @@ const UploadVideoButton = ({ refetch }: UploadVideoButtonProps) => {
           body: data,
         },
       );
-      const json = (await response.json()) as { url: string };
-      return json.url;
+      const json = (await response.json()) as { secure_url: string };
+      return json.secure_url;
     } catch (err) {
       throw err;
     }

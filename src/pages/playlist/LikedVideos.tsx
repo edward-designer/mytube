@@ -7,6 +7,7 @@ import { api } from "@/utils/api";
 import { assertString } from "@/utils/helpers";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { useEffect } from "react";
 
 const LikedVideo = () => {
   const { data: sessionData } = useSession();
@@ -15,9 +16,16 @@ const LikedVideo = () => {
   assertString(userId);
 
   const { data, isLoading, isRefetching, error, refetch } =
-    api.playlist.getLikedVideos.useQuery({
-      userId,
-    });
+    api.playlist.getLikedVideos.useQuery(
+      {
+        userId,
+      },
+      { enabled: false },
+    );
+
+  useEffect(() => {
+    if (userId) void refetch();
+  }, [userId]);
 
   if (isLoading || isRefetching) return <LoadingMessage />;
   if (!(!error && data))
@@ -34,7 +42,7 @@ const LikedVideo = () => {
       <Head>
         <title>Liked Video</title>
       </Head>
-      <div className="flex w-full flex-col">
+      <div className="flex min-h-full w-full flex-col">
         {data && data.videos.length > 0 ? (
           <div className="flex w-full flex-col p-6">
             <section className="mb-4 ">
@@ -46,7 +54,7 @@ const LikedVideo = () => {
             </section>
           </div>
         ) : (
-          <div className="flex h-full items-center justify-center">
+          <div className="-mt-16 flex flex-1 self-center">
             <NotAvailable variant="liked" />
           </div>
         )}

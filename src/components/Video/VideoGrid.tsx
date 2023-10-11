@@ -171,17 +171,17 @@ export const VideoDescription = ({
 }) => {
   const divRef = useRef<null | HTMLParagraphElement>(null);
   const [isAllVisible, setIsAllVisible] = useState(false);
-
+  const [alreadyAllShow, setAlreadyAllShow] = useState(false);
   const maxHeight = (linesToShow ?? 5) * 1.7;
 
   useEffect(() => {
     if (!divRef.current) return;
     if (divRef.current.clientHeight < divRef.current.scrollHeight) {
-      setIsAllVisible(false);
+      setAlreadyAllShow(false);
     } else {
-      setIsAllVisible(true);
+      setAlreadyAllShow(true);
     }
-  }, [linesToShow]);
+  }, [linesToShow, description]);
 
   return (
     <div
@@ -202,6 +202,7 @@ export const VideoDescription = ({
         className={cx([
           "absolute bottom-0 flex h-[4em] w-full items-end justify-center bg-gradient-to-t  to-transparent text-center",
           !isAllVisible ? "from-white" : "from-transparent",
+          alreadyAllShow ? "hidden" : "",
         ])}
       >
         <Button

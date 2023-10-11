@@ -52,7 +52,6 @@ const PlaylistCard = ({
             className="absolute bottom-1/2 left-1/2 hidden -translate-x-1/2 translate-y-1/2 items-center px-6 py-4 group-hover:flex"
             variant="primary"
             size="2xl"
-            href={`/playlist/${playlist.id}`}
           >
             <Search className="mr-2 h-6 w-6" />
             View Playlist

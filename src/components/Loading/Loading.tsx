@@ -1,14 +1,14 @@
 import ReactLoading from "react-loading";
 
 const LoadingMessage = ({
-  height = 200,
-  width = 200,
+  height = 100,
+  width = 100,
 }: {
   height?: number;
   width?: number;
 }) => {
   return (
-    <div className="max-w-screen relative flex max-h-screen w-full flex-col items-center justify-center gap-4 text-center">
+    <div className="max-w-screen relative flex min-h-full w-full flex-col items-center justify-center gap-4 text-center">
       <ReactLoading
         type={"spinningBubbles"}
         color={"#11999E"}

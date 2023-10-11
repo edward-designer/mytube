@@ -18,7 +18,6 @@ import { useEffect, useRef } from "react";
 
 interface SidebarProps {
   isOpen: boolean;
-  setSidebarOpen: (open: boolean) => void;
   closeSidebar: () => void;
   expandSideBar: boolean;
   setExpandSideBar: (state: boolean) => void;
@@ -26,7 +25,6 @@ interface SidebarProps {
 
 const Sidebar = ({
   isOpen,
-  setSidebarOpen,
   closeSidebar,
   expandSideBar,
   setExpandSideBar,
@@ -42,7 +40,7 @@ const Sidebar = ({
       <div
         className={cx([
           expandSideBar ? "-ml-56 w-56 " : "-ml-[4em] w-[4em]",
-          "top-0 shrink-0 -translate-x-full transition-all lg:sticky lg:bottom-0 lg:z-40 lg:ml-0 lg:mr-0 lg:flex lg:translate-x-0 lg:flex-col",
+          "top-0 hidden shrink-0 -translate-x-full transition-all lg:sticky lg:bottom-0 lg:z-40 lg:ml-0 lg:mr-0 lg:block lg:flex lg:translate-x-0 lg:flex-col",
         ])}
       >
         <div
@@ -50,6 +48,12 @@ const Sidebar = ({
           onMouseLeave={() => setExpandSideBar(false)}
           className="flex grow flex-col gap-y-5 overflow-y-auto border border-t-0 border-gray-200 bg-white px-6 pb-4"
         >
+          <a
+            href="#main"
+            className="absolute top-2 -translate-x-[200%] bg-primary-600 p-2 text-xs text-white first-letter:focus-within:block focus:translate-x-0 focus:ring-2 focus:ring-primary-600"
+          >
+            Skip to main content
+          </a>
           <nav className="flex flex-1 flex-col pt-8">
             <ul role="list" className="flex flex-1 flex-col justify-between">
               <li>

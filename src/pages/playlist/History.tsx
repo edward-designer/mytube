@@ -7,6 +7,7 @@ import { api } from "@/utils/api";
 import { assertString } from "@/utils/helpers";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { useEffect } from "react";
 
 const History = () => {
   const { data: sessionData } = useSession();
@@ -15,9 +16,16 @@ const History = () => {
   assertString(userId);
 
   const { data, isLoading, isFetching, error, refetch } =
-    api.user.getVideosHistoryById.useQuery({
-      userId,
-    });
+    api.user.getVideosHistoryById.useQuery(
+      {
+        userId,
+      },
+      { enabled: false },
+    );
+
+  useEffect(() => {
+    if (userId) void refetch();
+  }, [userId]);
 
   if (isLoading && isFetching) return <LoadingMessage />;
   if (!(!error && data))
@@ -48,7 +56,7 @@ const History = () => {
             </section>
           </div>
         ) : (
-          <div className="flex h-full items-center justify-center">
+          <div className="-mt-16 flex flex-1 self-center">
             <NotAvailable variant="history" />
           </div>
         )}

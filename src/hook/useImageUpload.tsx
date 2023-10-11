@@ -110,8 +110,8 @@ const useImageUpload = ({
           body: data,
         },
       );
-      const json = (await response.json()) as { url: string };
-      return json.url;
+      const json = (await response.json()) as { secure_url: string };
+      return json.secure_url;
     } catch (err) {
       console.log(err);
     }
@@ -135,7 +135,7 @@ const useImageUpload = ({
     useCrop && (
       <>
         <div className="fixed inset-0 z-40 h-full w-full bg-black/70 " />
-        <div className="absolute z-50 ml-[50%] mt-6 -translate-x-[50%] bg-white/90 p-[3vw] shadow-lg">
+        <div className="fixed z-50 ml-[50%] mt-6 -translate-x-[50%] bg-white/90 p-[3vw] shadow-lg">
           <Cropper
             src={
               uploadFile instanceof File

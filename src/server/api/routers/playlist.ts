@@ -276,12 +276,20 @@ export const playlistRouter = createTRPCRouter({
         });
       }
       if (input.addPlaylistId) {
-        await ctx.db.playlistHasVideo.create({
-          data: {
+        const alreadyPresent = await ctx.db.playlistHasVideo.findFirst({
+          where: {
             playlistId: input.addPlaylistId,
             videoId: input.videoId,
           },
         });
+        if (!alreadyPresent) {
+          await ctx.db.playlistHasVideo.create({
+            data: {
+              playlistId: input.addPlaylistId,
+              videoId: input.videoId,
+            },
+          });
+        }
       }
     }),
 });

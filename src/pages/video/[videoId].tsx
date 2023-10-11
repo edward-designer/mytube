@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { type NextPage } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
@@ -12,12 +11,10 @@ import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import LoadingMessage from "@/components/Loading/Loading";
 import RecommendedVideos from "@/components/Video/RecommendedVideos";
 import {
-  UserName,
   VideoDescription,
   VideoInfo,
   VideoTitle,
 } from "@/components/Video/VideoGrid";
-import UserImage from "@/components/Video/UserImage";
 import { assertString } from "@/utils/helpers";
 import FollowButton from "@/components/Buttons/FolllowButton";
 import LikeButton from "@/components/Buttons/LikeButton";
@@ -57,7 +54,7 @@ const VideoPage: NextPage = () => {
   };
 
   useEffect(() => {
-    void refetch();
+    if (videoId !== "" && viewerId !== "") void refetch();
   }, [videoId, viewerId]);
 
   useEffect(() => {

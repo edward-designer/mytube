@@ -33,11 +33,15 @@ const Layout = ({ children }: { children: ReactElement }) => {
           <Sidebar
             isOpen={isOpen}
             closeSidebar={closeSidebar}
-            setSidebarOpen={setSidebarOpen}
             expandSideBar={expandSideBar}
             setExpandSideBar={setExpandSideBar}
           />
-          {children}
+          <section
+            className="min-h-full w-full items-center justify-center overflow-auto"
+            id="main"
+          >
+            {children}
+          </section>
         </div>
         <div className="bottom-0 z-40 w-full bg-white lg:hidden">
           <Footer />

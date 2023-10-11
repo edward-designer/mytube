@@ -13,7 +13,7 @@ const AddNewVideoButton = ({ variant }: { variant: string }) => {
       className="flex justify-center rounded-lg"
       href={URL}
     >
-      <Plus className={cx([`mr-2 h-5 w-5 shrink-0`])} />
+      <Plus className={cx([`mr-2 h-5 w-5 shrink-0 stroke-white`])} />
       New {`${variant.at(0)?.toUpperCase()}${variant.slice(1)}`}
     </Button>
   );

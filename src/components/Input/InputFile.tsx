@@ -16,18 +16,23 @@ const InputFile = ({ name, uploadHandler, isUploading }: InputFileProps) => {
         <>
           <label
             htmlFor={name}
-            className="group block cursor-pointer rounded-full bg-white/60 p-4 shadow-md hover:bg-white"
+            className="group flex aspect-square cursor-pointer flex-col rounded-full bg-white/60 p-4 shadow-md focus-within:outline-none focus-within:ring-4 focus-within:ring-primary-600 focus-within:ring-offset-2 hover:bg-white hover:text-primary-600 "
           >
-            <span className="sr-only">Upload {name}</span>
-            <Upload className="h-12 w-12 group-hover:animate-bounce" />
+            <Upload
+              className="h-8 group-hover:animate-bounce"
+              aria-hidden={true}
+            />
+            <span className="text-md">Upload</span>
+            <span className="sr-only"> {name}</span>
+            <input
+              type="file"
+              className="sr-only"
+              id={name}
+              name={name}
+              onChange={(e) => uploadHandler(e.target.files?.[0])}
+              accept="image/*"
+            />
           </label>
-          <input
-            type="file"
-            className="hidden"
-            id={name}
-            name={name}
-            onChange={(e) => uploadHandler(e.target.files?.[0])}
-          />
         </>
       )}
     </form>

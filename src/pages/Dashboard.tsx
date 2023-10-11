@@ -14,13 +14,18 @@ import { Thumbnail } from "@/components/Video/Thumbnail";
 import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { useEffect } from "react";
 
 const Dashboard = () => {
   const { data: sessionData } = useSession();
   const userId = sessionData?.user.id ?? "";
 
   const { data, isLoading, error, refetch } =
-    api.user.getDashboardData.useQuery(userId);
+    api.user.getDashboardData.useQuery(userId, { enabled: false });
+
+  useEffect(() => {
+    if (userId) void refetch();
+  }, [userId]);
 
   if (isLoading) return <LoadingMessage />;
   if (!(!error && data))

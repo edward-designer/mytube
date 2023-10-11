@@ -1,6 +1,5 @@
 import { api } from "@/utils/api";
 import { assertString } from "@/utils/helpers";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import NotAvailable from "@/components/ErrorMessage/NotAvailable";
@@ -8,6 +7,7 @@ import LoadingMessage from "@/components/Loading/Loading";
 import PlaylistCard from "@/components/Playlist/PlaylistCard";
 import VideoGrid from "@/components/Video/VideoGrid";
 import UserCard from "@/components/Video/UserCard";
+import { useEffect } from "react";
 
 const Playlist = () => {
   const router = useRouter();
@@ -15,10 +15,17 @@ const Playlist = () => {
 
   assertString(playlistId);
 
-  const { data, isLoading, error } =
-    api.playlist.getVideosByPlaylistId.useQuery({
-      playlistId,
-    });
+  const { data, isLoading, error, refetch } =
+    api.playlist.getVideosByPlaylistId.useQuery(
+      {
+        playlistId,
+      },
+      { enabled: false },
+    );
+
+  useEffect(() => {
+    if (playlistId) void refetch();
+  }, [playlistId]);
 
   if (isLoading) return <LoadingMessage />;
   if (!(!error && data))
@@ -33,7 +40,7 @@ const Playlist = () => {
     users: data.videos.map(({ user }) => user),
   };
   return (
-    <div className="flex w-full flex-row flex-wrap gap-10 overflow-y-scroll p-10">
+    <div className="flex w-full flex-row flex-wrap gap-10 p-10">
       <div className="flex flex-1 basis-[400px]">
         {data.videos[0] && (
           <div className="flex w-full flex-col">
