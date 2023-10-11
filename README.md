@@ -20,8 +20,8 @@ Online platform used:
 
 ### Video Browsing
 
-![homepage](https://res.cloudinary.com/deh6cggus/image/upload/v1697037666/github/e59ytctxm7va5ivz4yev.gif)
-![video streaming](https://res.cloudinary.com/deh6cggus/image/upload/v1697037667/github/zj3u3wlkucnbomotyphw.gif)
+![homepage](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-home.gif)
+![video streaming](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-video.gif)
 
 ### Image/Video Uploading and Adding Metadata
 
