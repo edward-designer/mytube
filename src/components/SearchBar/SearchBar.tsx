@@ -10,6 +10,7 @@ const SearchBar = () => {
     if (e.key === "Enter") void handleSearch();
   };
   const handleSearch = async () => {
+    setSearchInput("");
     try {
       await router.push({
         pathname: "/SearchPage",
@@ -38,6 +39,7 @@ const SearchBar = () => {
             setSearchInput(e.target.value)
           }
           onKeyDown={handleKeyDown}
+          value={searchInput}
         />
       </div>
     </>

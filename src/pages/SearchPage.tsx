@@ -30,9 +30,14 @@ const SearchPage = () => {
         />
       );
   };
-  console.log(data);
   return data?.videos && data?.users && data.videos.length !== 0 ? (
-    <VideoGrid data={data} />
+    <div className="p-8">
+      <h2 className="text-lg font-bold">
+        Search results for &quot;
+        <span className="text-2xl text-primary-800">{search}</span>&quot;
+      </h2>
+      <VideoGrid data={data} />
+    </div>
   ) : (
     <div className="flex h-full w-full items-center justify-center">
       <Message />

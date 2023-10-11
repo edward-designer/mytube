@@ -114,14 +114,15 @@ const UploadVideoButton = ({ refetch }: UploadVideoButtonProps) => {
               >
                 <Dialog.Panel className="relative w-full transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                   <div className="flex w-full">
-                    <div className="mx-auto flex !h-12 !w-12 grow-0">
-                      <Upload aria-hidden="true" />
-                    </div>
-                    <div className="mt-3 w-full flex-1 sm:ml-4 sm:mt-0 sm:text-left">
+                    <div className="mt-3 w-full flex-1 sm:mt-0 sm:text-left">
                       <Dialog.Title
                         as="h3"
                         className="text-base font-semibold leading-6 text-gray-900"
                       >
+                        <Upload
+                          className="mr-2 inline h-6 w-6"
+                          aria-hidden="true"
+                        />
                         Upload Video
                       </Dialog.Title>
                       {isUploading ? (

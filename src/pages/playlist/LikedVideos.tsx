@@ -42,7 +42,7 @@ const LikedVideo = () => {
                 <ThumbsUp className="mr-2 inline h-5 w-5 shrink-0 stroke-gray-900" />
                 Liked Videos
               </h2>
-              <VideoGrid data={data} />;
+              <VideoGrid data={data} />
             </section>
           </div>
         ) : (
