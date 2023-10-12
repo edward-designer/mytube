@@ -30,7 +30,7 @@ const Home: NextPage = () => {
   };
 
   return isLoading ? (
-    <VideoGrid isLoading={isLoading && isFetching} />
+    <VideoGrid isLoading={isLoading || isFetching} />
   ) : data?.videos && data?.users ? (
     <VideoGrid data={data} />
   ) : (
