@@ -27,7 +27,7 @@ const VideoLoadingPlaceholder = () => {
 
 export default VideoLoadingPlaceholder;
 
-const AsidePlaceholder = () => (
+export const AsidePlaceholder = () => (
   <div className="flex flex-1 basis-1/2 flex-col items-start">
     <div className="flex w-full items-center gap-4">
       <div className=" basis-1/2">
@@ -58,7 +58,7 @@ const AsidePlaceholder = () => (
   </div>
 );
 
-const DetailsPlaceholder = () => (
+export const DetailsPlaceholder = () => (
   <div className="mt-4 flex space-x-3 rounded-2xl border border-gray-200 p-4 shadow-sm">
     <div className="min-w-0 flex-1 space-y-3 ">
       <div className="xs:flex-wrap flex flex-row justify-between gap-4 max-md:flex-wrap">

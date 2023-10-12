@@ -1,7 +1,6 @@
 import { type NextPage } from "next";
 
 import { api } from "@/utils/api";
-import LoadingMessage from "@/components/Loading/Loading";
 import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import VideoGrid from "@/components/Video/VideoGrid";
 
@@ -11,7 +10,6 @@ const Home: NextPage = () => {
   });
 
   const Message = () => {
-    if (isLoading) return <LoadingMessage />;
     if (!data)
       return (
         <ErrorMessage
@@ -30,7 +28,9 @@ const Home: NextPage = () => {
       );
   };
 
-  return data?.videos && data?.users ? (
+  return isLoading ? (
+    <VideoGrid isLoading={isLoading} />
+  ) : data?.videos && data?.users ? (
     <VideoGrid data={data} />
   ) : (
     <div className="flex h-full w-full items-center justify-center">

@@ -4,11 +4,11 @@ import Image from "next/image";
 import moment from "moment";
 import { cx } from "@/utils/helpers";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, ChevronUp } from "../Icons/Chevron";
+import { ChevronDown } from "../Icons/Chevron";
 import { Button } from "../Buttons";
 
 interface VideoGridProps {
-  data: {
+  data?: {
     videos: (
       | {
           views: number;
@@ -39,44 +39,100 @@ interface VideoGridProps {
     )[];
   };
   variant?: string;
+  isLoading?: boolean;
 }
 
 const VideoGrid = ({
-  data: { videos, users },
+  data,
   variant = "home",
+  isLoading = false,
 }: VideoGridProps) => {
-  const videosToShow = videos.filter((video) => Boolean);
-  return (
-    <div
-      className={cx([
-        "w-full content-start gap-8",
-        variant === "aside"
-          ? "flex flex-wrap content-start gap-y-4 [&>*]:flex-1 [&>*]:basis-[350px]"
-          : "",
-        variant === "home"
-          ? "grid grid-cols-1 gap-y-6 p-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-y-12 lg:p-12 2xl:grid-cols-4"
-          : "",
-      ])}
-    >
-      {videosToShow.map((video, index) => {
-        const user = users[index];
-        if (video === undefined || user === undefined) return;
-        return (
-          <VideoCard
-            key={video.id}
-            video={video}
-            user={user}
-            variant={variant}
-          />
-        );
-      })}
-      {/* hack to prevent the last odd element to grow to full width */}
-      {videosToShow.length % 2 !== 0 && <i className="h-0 grow-[100000]" />}
-    </div>
-  );
+  if (isLoading) {
+    return (
+      <div
+        className={cx([
+          "w-full content-start gap-8",
+          variant === "aside"
+            ? "flex flex-wrap content-start gap-y-4 [&>*]:flex-1 [&>*]:basis-[350px]"
+            : "",
+          variant === "home"
+            ? "grid grid-cols-1 gap-y-6 p-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-y-12 lg:p-12 2xl:grid-cols-4"
+            : "",
+        ])}
+      >
+        {[...Array(12).keys()].map((i) => (
+          <SkeletonVideoCard key={i} />
+        ))}
+      </div>
+    );
+  }
+  if (data) {
+    const { videos, users } = data;
+    const videosToShow = videos.filter((video) => Boolean);
+    return (
+      <div
+        className={cx([
+          "w-full content-start gap-8",
+          variant === "aside"
+            ? "flex flex-wrap content-start gap-y-4 [&>*]:flex-1 [&>*]:basis-[350px]"
+            : "",
+          variant === "home"
+            ? "grid grid-cols-1 gap-y-6 p-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-y-12 lg:p-12 2xl:grid-cols-4"
+            : "",
+        ])}
+      >
+        {videosToShow.map((video, index) => {
+          const user = users[index];
+          if (video === undefined || user === undefined) return;
+          return (
+            <VideoCard
+              key={video.id}
+              video={video}
+              user={user}
+              variant={variant}
+            />
+          );
+        })}
+        {/* hack to prevent the last odd element to grow to full width */}
+        {videosToShow.length % 2 !== 0 && <i className="h-0 grow-[100000]" />}
+      </div>
+    );
+  }
 };
 
 export default VideoGrid;
+
+const SkeletonVideoCard = () => (
+  <div className="flex flex-1 flex-col items-start hover:bg-gray-100 lg:basis-1/4">
+    <div className="relative w-full">
+      <div className="w-full">
+        <div className="relative inset-0 h-0 w-full animate-pulse rounded-xl  bg-slate-200 pb-[50%]"></div>
+      </div>
+      <div className="-mt-3 max-w-xl lg:mt-0">
+        <div className="items-top  relative mt-4 flex gap-x-4">
+          <div className="relative aspect-square h-10 w-10 animate-pulse rounded-full  bg-slate-200"></div>
+          <div className="w-full">
+            <h1 className="line-clamp-2 max-h-12 w-full  max-w-md animate-pulse overflow-hidden bg-slate-200 text-base font-semibold leading-4 text-gray-900 group-hover:text-gray-600 lg:leading-6">
+              &nbsp;
+            </h1>
+            <div className="mt-1 flex max-h-6 items-start overflow-hidden text-sm">
+              <p className="animate-pulse  bg-slate-200 text-gray-600">
+                &nbsp;<span> &nbsp;</span>
+              </p>
+              <li className="animate-pulse pl-2 text-sm text-slate-200"></li>
+              <p className="w-full animate-pulse bg-slate-200 text-gray-600">
+                &nbsp;
+              </p>
+            </div>
+            <p className=" max-h-6 overflow-hidden text-left text-sm font-semibold leading-6 text-gray-900">
+              &nbsp;
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 const VideoCard = ({
   video,

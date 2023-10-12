@@ -5,6 +5,7 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import LoadingMessage from "../Loading/Loading";
 import { useRouter } from "next/router";
 import { assertString } from "@/utils/helpers";
+import { AsidePlaceholder } from "../Loading/VideoLoadingPlaceholder";
 
 const RecommendedVideos = () => {
   const router = useRouter();
@@ -37,7 +38,18 @@ const RecommendedVideos = () => {
   return (
     <div className="flex h-full w-full place-content-center">
       {isFetching || isLoading ? (
-        <LoadingMessage />
+        <div className="flex h-full w-full place-content-center">
+          <div className="flex w-full flex-wrap content-start gap-8 gap-y-4 [&>*]:flex-1 [&>*]:basis-[350px]">
+            <AsidePlaceholder />
+            <AsidePlaceholder />
+            <AsidePlaceholder />
+            <AsidePlaceholder />
+            <AsidePlaceholder />
+            <AsidePlaceholder />
+            <AsidePlaceholder />
+            <AsidePlaceholder />
+          </div>
+        </div>
       ) : (
         <VideoGrid data={data} variant="aside" />
       )}
