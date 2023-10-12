@@ -21,6 +21,7 @@ import LikeButton from "@/components/Buttons/LikeButton";
 import Comments from "@/components/Comment/Comments";
 import SaveButton from "@/components/Buttons/SaveButton";
 import UserCard from "@/components/Video/UserCard";
+import VideoLoadingPlaceholder from "@/components/Loading/VideoLoadingPlaceholder";
 
 const VideoPage: NextPage = () => {
   const router = useRouter();
@@ -61,7 +62,7 @@ const VideoPage: NextPage = () => {
     if (playerRef.current) playerRef.current.scrollIntoView();
   }, [videoId]);
 
-  if (isLoading) return <LoadingMessage />;
+  if (isLoading) return <VideoLoadingPlaceholder />;
   if (
     !(
       typeof videoId === "string" &&
