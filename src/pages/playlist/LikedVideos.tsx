@@ -27,14 +27,18 @@ const LikedVideo = () => {
     if (userId) void refetch();
   }, [userId]);
 
+  if (!userId)
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <NotAvailable variant="page" />
+      </div>
+    );
   if (isLoading || isRefetching) return <LoadingMessage />;
   if (!(!error && data))
     return (
-      <ErrorMessage
-        icon="GreenPlay"
-        message="Error Getting Liked Videos"
-        description="Sorry the request cannot be fulfilled."
-      />
+      <div className="flex h-full w-full items-center justify-center">
+        <NotAvailable variant="page" />
+      </div>
     );
 
   return (

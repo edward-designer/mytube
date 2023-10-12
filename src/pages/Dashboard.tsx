@@ -24,14 +24,20 @@ const Dashboard = () => {
     api.user.getDashboardData.useQuery(userId, { enabled: false });
 
   useEffect(() => {
-    if (userId) void refetch();
+    if (!userId) void refetch();
   }, [userId]);
 
+  if (!userId)
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <NotAvailable variant="page" />
+      </div>
+    );
   if (isLoading) return <LoadingMessage />;
   if (!(!error && data))
     return (
       <div className="flex h-full w-full items-center justify-center">
-        <NotAvailable variant="video" />
+        <NotAvailable variant="page" />
       </div>
     );
 

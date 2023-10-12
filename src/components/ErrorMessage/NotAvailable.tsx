@@ -13,7 +13,8 @@ const NotAvailable = ({
     | "history"
     | "liked"
     | "following"
-    | "announcement";
+    | "announcement"
+    | "page";
 }) => {
   const MESSAGES = {
     video: {
@@ -22,6 +23,11 @@ const NotAvailable = ({
         ? "Click to upload new video!"
         : "Check back at a later time",
       icon: "GreenPlay",
+    },
+    page: {
+      title: "The page is currently unavailable",
+      description: "Check back at a later time",
+      icon: "GreenEye",
     },
     playlist: {
       title: "No playlists created",

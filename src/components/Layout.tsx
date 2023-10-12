@@ -18,7 +18,7 @@ const Layout = ({ children }: { children: ReactElement }) => {
         <meta name="description" content="A Youtube Clone" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="relative flex h-screen flex-col">
+      <main className="relative flex min-h-[100dvh] flex-col">
         <Navbar>
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -29,7 +29,7 @@ const Layout = ({ children }: { children: ReactElement }) => {
           </button>
         </Navbar>
 
-        <div className="flex flex-1 overflow-y-auto">
+        <div className="relative flex flex-1">
           <Sidebar
             isOpen={isOpen}
             closeSidebar={closeSidebar}
@@ -37,13 +37,13 @@ const Layout = ({ children }: { children: ReactElement }) => {
             setExpandSideBar={setExpandSideBar}
           />
           <section
-            className="min-h-full w-full items-center justify-center overflow-auto"
+            className="relative flex-1 items-center justify-center lg:ml-[4em]"
             id="main"
           >
             {children}
           </section>
         </div>
-        <div className="bottom-0 z-40 w-full bg-white lg:hidden">
+        <div className="sticky bottom-0 z-40 w-full bg-white lg:hidden">
           <Footer />
         </div>
       </main>

@@ -27,14 +27,18 @@ const History = () => {
     if (userId) void refetch();
   }, [userId]);
 
+  if (!userId)
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <NotAvailable variant="page" />
+      </div>
+    );
   if (isLoading && isFetching) return <LoadingMessage />;
   if (!(!error && data))
     return (
-      <ErrorMessage
-        icon="GreenPlay"
-        message="Error Getting Profile"
-        description="Sorry the requested profile cannot be found."
-      />
+      <div className="flex h-full w-full items-center justify-center">
+        <NotAvailable variant="page" />
+      </div>
     );
 
   const videos = data.videosWithCounts.map(({ user, ...video }) => video);

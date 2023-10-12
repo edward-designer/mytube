@@ -40,7 +40,7 @@ const Sidebar = ({
       <div
         className={cx([
           expandSideBar ? "-ml-56 w-56 " : "-ml-[4em] w-[4em]",
-          "top-0 hidden shrink-0 -translate-x-full transition-all lg:sticky lg:bottom-0 lg:z-40 lg:ml-0 lg:mr-0 lg:block lg:flex lg:translate-x-0 lg:flex-col",
+          "fixed bottom-0 top-16 hidden  shrink-0 -translate-x-full overflow-y-auto transition-all lg:z-20 lg:ml-0 lg:mr-0 lg:flex lg:translate-x-0 lg:flex-col",
         ])}
       >
         <div
@@ -136,7 +136,10 @@ const MobileMenu = ({
   }, [closeSidebar]);
 
   return (
-    <Transition show={isOpen} className="absolute inset-0 z-50 lg:hidden">
+    <Transition
+      show={isOpen}
+      className="fixed inset-0 z-50 h-[100dvh] max-h-[100dvh] lg:hidden"
+    >
       <Transition.Child
         enter="transition-opacity ease-in-out duration-300"
         enterFrom="opacity-0"
@@ -157,7 +160,7 @@ const MobileMenu = ({
       >
         <div
           ref={mobileMenuRef}
-          className="fixed flex h-screen w-80 bg-white px-4"
+          className="fixed flex h-[100dvh] w-[280px] bg-white px-4"
         >
           <Button
             onClick={closeSidebar}

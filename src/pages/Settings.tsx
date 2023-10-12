@@ -12,6 +12,7 @@ import useImageUpload from "@/hook/useImageUpload";
 
 import { type UserData } from "@/hook/useImageUpload";
 import UserCheck from "@/components/Icons/UserCheck";
+import NotAvailable from "@/components/ErrorMessage/NotAvailable";
 
 const Settings = () => {
   const { data: sessionData } = useSession();
@@ -71,6 +72,12 @@ const Settings = () => {
     aspectRatio: 2 / 1,
   });
 
+  if (!userId)
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <NotAvailable variant="page" />
+      </div>
+    );
   if (isLoading) return <LoadingMessage />;
   if (!(!error && data))
     return (

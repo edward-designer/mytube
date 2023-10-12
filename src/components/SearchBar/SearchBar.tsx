@@ -3,7 +3,12 @@ import router from "next/router";
 
 import { Search } from "@/components/Icons/Icons";
 
-const SearchBar = () => {
+interface SearchBarProps {
+  showLogo: boolean;
+  setShowLogo: (state: boolean) => void;
+}
+
+const SearchBar = ({ showLogo, setShowLogo }: SearchBarProps) => {
   const [searchInput, setSearchInput] = useState("");
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -20,6 +25,14 @@ const SearchBar = () => {
       console.log("Error searching:", error);
     }
   };
+
+  const handleOnFocus = () => {
+    setShowLogo(false);
+  };
+  const handleOnBlur = () => {
+    setShowLogo(true);
+  };
+
   return (
     <>
       <label htmlFor="search" className="sr-only">
@@ -38,6 +51,8 @@ const SearchBar = () => {
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setSearchInput(e.target.value)
           }
+          onFocus={handleOnFocus}
+          onBlur={handleOnBlur}
           onKeyDown={handleKeyDown}
           value={searchInput}
         />
