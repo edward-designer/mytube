@@ -22,7 +22,6 @@ const InputBox = ({
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const successHandler = () => {
-    setValue("");
     if (textareaRef.current) textareaRef.current.style.height = "auto";
     void refetch();
   };
@@ -43,6 +42,7 @@ const InputBox = ({
       );
     };
   }, []);
+
   return (
     <>
       <textarea
@@ -56,7 +56,10 @@ const InputBox = ({
       {value.length > 5 && (
         <Button
           className="mt-2 px-4"
-          onClick={() => addHandler({ message: value, successHandler })}
+          onClick={() => {
+            setValue("");
+            addHandler({ message: value, successHandler });
+          }}
         >
           Submit
         </Button>
