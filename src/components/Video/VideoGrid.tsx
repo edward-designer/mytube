@@ -7,36 +7,34 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "../Icons/Chevron";
 import { Button } from "../Buttons";
 
+interface Video {
+  views: number;
+  id: string;
+  title: string | null;
+  thumbnailUrl: string | null;
+  description: string | null;
+  videoUrl: string | null;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publish: boolean;
+}
+
+interface User {
+  id: string;
+  name: string | null;
+  email: string;
+  emailVerified: Date | null;
+  image: string | null;
+  backgroundImage: string | null;
+  handle: string | null;
+  description: string | null;
+}
+
 interface VideoGridProps {
   data?: {
-    videos: (
-      | {
-          views: number;
-          id: string;
-          title: string | null;
-          thumbnailUrl: string | null;
-          description: string | null;
-          videoUrl: string | null;
-          userId: string;
-          createdAt: Date;
-          updatedAt: Date;
-          publish: boolean;
-        }
-      | undefined
-    )[];
-    users: (
-      | {
-          id: string;
-          name: string | null;
-          email: string;
-          emailVerified: Date | null;
-          image: string | null;
-          backgroundImage: string | null;
-          handle: string | null;
-          description: string | null;
-        }
-      | undefined
-    )[];
+    videos: (Video | undefined)[];
+    users: (User | undefined)[];
   };
   variant?: string;
   isLoading?: boolean;
@@ -139,8 +137,8 @@ const VideoCard = ({
   user,
   variant,
 }: {
-  video: NonNullable<VideoGridProps["data"]["videos"][0]>;
-  user: NonNullable<VideoGridProps["data"]["users"][0]>;
+  video: Video;
+  user: User;
   variant: string;
 }) => {
   return (
