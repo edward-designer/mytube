@@ -5,9 +5,10 @@ import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import VideoGrid from "@/components/Video/VideoGrid";
 
 const Home: NextPage = () => {
-  const { data, isLoading, error } = api.video.getRandomVideos.useQuery({
-    count: 30,
-  });
+  const { data, isLoading, isFetching, error } =
+    api.video.getRandomVideos.useQuery({
+      count: 30,
+    });
 
   const Message = () => {
     if (!data)
@@ -29,7 +30,7 @@ const Home: NextPage = () => {
   };
 
   return isLoading ? (
-    <VideoGrid isLoading={isLoading} />
+    <VideoGrid isLoading={isLoading && isFetching} />
   ) : data?.videos && data?.users ? (
     <VideoGrid data={data} />
   ) : (

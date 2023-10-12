@@ -17,48 +17,54 @@ Online platform used:
 - Video/Image: [Cloudinary](https://cloudinary.com/)
 
 This app is based on the [tutorial by Jerome McCree](https://www.vidchill.org/) with lots of customizations and enhancements:
- - **UX of image/video upload / update**
-   -- steps of video upload
-   -- use of auto-generated video thumbnail
-   -- debounced auto save of video meta data
-   -- image upload hook
-   -- error handling
- - **UX of user input**
-   -- partial hiding of long video descriptions
-   -- auto expansion of textarea height based on input length
- - **Visual design**
-   -- auto minimize of sidebar
-   -- animated like/dislike icons
-   -- responsive layout
-   -- History and Liked pages
- - **Security**
-   -- userId is got directly from db rather than supplying through API payload    
+
+- **UX of image/video upload / update**
+  -- steps of video upload
+  -- use of auto-generated video thumbnail
+  -- debounced auto save of video meta data
+  -- image upload hook
+  -- error handling
+  -- skeleton loading
+- **UX of user input**
+  -- partial hiding of long video descriptions
+  -- auto expansion of textarea height based on input length
+  -- _optimistic update_ for commenting
+- **Visual design**
+  -- auto minimize of sidebar
+  -- animated like/dislike icons
+  -- responsive layout
+  -- History and Liked pages
+- **Security**
+  -- userId is got directly from db rather than supplying through API payload
 
 ## Features of the myTube App
 
 ### Video Browsing
+
 - Homepage
-![homepage](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-home.gif)
+  ![homepage](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-home.gif)
 - Video
-![video streaming](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-video.gif)
+  ![video streaming](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-video.gif)
 
 ### Image/Video Uploading and Adding Metadata
+
 - Dashboard
-![dashboard](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-dashboard.gif)
+  ![dashboard](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-dashboard.gif)
 - Video Upload
-![video upload](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-uploadVideo.gif)
+  ![video upload](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-uploadVideo.gif)
 - Image Upload
-![image upload](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-uploadImage.gif)
+  ![image upload](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-uploadImage.gif)
 
 ### Interactions - like/unlike/comment/add to playlists/follow
+
 - Like, Unlike and Follow
-![like, unlik, follow](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-like.gif)
+  ![like, unlik, follow](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-like.gif)
 - Add Video to Playlist
-![add to playlist](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-playlist.gif)
+  ![add to playlist](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-playlist.gif)
 - Add Comments
-![adding comments](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-comment.gif)
+  ![adding comments](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-comment.gif)
 - Liked Video and History
-![likes and history](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-history.gif)
+  ![likes and history](https://github.com/edward-designer/edward-designer.github.io/blob/main/images/c-history.gif)
 
 ## Installation
 
