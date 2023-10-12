@@ -17,8 +17,9 @@ const Layout = ({ children }: { children: ReactElement }) => {
         <title>MyTube UK</title>
         <meta name="description" content="A Youtube Clone" />
         <link rel="icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <main className="relative flex min-h-[100dvh] flex-col">
+      <main className="relative flex min-h-[100dvh] max-w-[100dvw] flex-col">
         <Navbar>
           <button
             onClick={() => setIsOpen(!isOpen)}

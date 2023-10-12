@@ -9,7 +9,7 @@ const EditButton = ({ videoId }: { videoId: string }) => {
         variant="secondary-gray"
         className="h-8 w-8"
       >
-        <Edit className=" stroke-primary-700" />
+        <Edit className="h-6 w-6 stroke-primary-700" />
         <span className="sr-only">Edit Video</span>
       </Button>
     </>

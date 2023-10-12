@@ -27,13 +27,13 @@ const History = () => {
     if (userId) void refetch();
   }, [userId]);
 
+  if (isLoading && isFetching) return <LoadingMessage />;
   if (!userId)
     return (
       <div className="flex h-full w-full items-center justify-center">
         <NotAvailable variant="page" />
       </div>
     );
-  if (isLoading && isFetching) return <LoadingMessage />;
   if (!(!error && data))
     return (
       <div className="flex h-full w-full items-center justify-center">
@@ -50,9 +50,9 @@ const History = () => {
       </Head>
       <div className="flex w-full flex-col">
         {data && data.videosWithCounts.length > 0 ? (
-          <div className="flex w-full flex-col p-6">
+          <div className="flex w-full flex-col px-3 py-6 lg:p-6">
             <section className="mb-4 ">
-              <h2 className="-mb-6 pl-8 text-xl font-semibold">
+              <h2 className="pl-4 text-xl font-semibold lg:-mb-6 lg:pl-8">
                 <ClockRewind className="mr-2 inline h-5 w-5 shrink-0 stroke-gray-900" />
                 History
               </h2>

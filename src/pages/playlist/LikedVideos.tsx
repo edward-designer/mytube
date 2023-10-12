@@ -27,13 +27,13 @@ const LikedVideo = () => {
     if (userId) void refetch();
   }, [userId]);
 
+  if (isLoading || isRefetching) return <LoadingMessage />;
   if (!userId)
     return (
       <div className="flex h-full w-full items-center justify-center">
         <NotAvailable variant="page" />
       </div>
     );
-  if (isLoading || isRefetching) return <LoadingMessage />;
   if (!(!error && data))
     return (
       <div className="flex h-full w-full items-center justify-center">

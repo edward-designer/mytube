@@ -35,7 +35,7 @@ const DeleteButton = ({ videoId, refetch }: DeleteButtonProps) => {
         variant="secondary-gray"
         className="h-8 w-8"
       >
-        <Trash />
+        <Trash className="h-6 w-6" />
         <span className="sr-only">Delete Video</span>
       </Button>
       <Transition.Root show={confirmScreen} as={Fragment}>

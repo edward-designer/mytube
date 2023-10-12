@@ -81,7 +81,7 @@ const EditPage = () => {
     );
 
   return (
-    <div className="flex h-full w-full flex-row flex-wrap overflow-visible p-8">
+    <div className="flex h-full w-full flex-row flex-wrap overflow-visible">
       <div className="flex flex-1 basis-1/2 flex-col p-8">
         {Thumbnail && <Thumbnail.CropCard />}
 
@@ -113,7 +113,7 @@ const EditPage = () => {
             </button>
           </div>
         </div>
-        <section className="flex flex-wrap content-start gap-8 p-6 lg:p-12">
+        <section className="flex flex-wrap content-start gap-8 lg:p-12">
           <div className="flex w-full flex-col">
             <div className="mb-3 mt-1 flex w-full flex-row flex-wrap items-center gap-4">
               <label
@@ -178,8 +178,8 @@ const EditPage = () => {
           </div>
         </section>
       </div>
-      <div className="mb-8 flex-1 basis-1/2 rounded-xl border">
-        <section className="flex w-full flex-wrap content-start gap-8 overflow-y-auto p-6 lg:p-12">
+      <div className="mb-8 flex-1 basis-1/2 rounded-xl p-4">
+        <section className="flex w-full flex-wrap content-start gap-8 overflow-y-auto border-t p-6 md:border-l md:border-t-0 lg:p-12">
           <div className="flex-1 grow-[3] basis-[640px]">
             <ReactPlayer
               url={video?.videoUrl ?? ""}
