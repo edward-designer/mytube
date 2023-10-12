@@ -46,7 +46,6 @@ const Comments = ({ videoId, comments, refetch }: CommentProps) => {
     addCommentMutation.mutate(input, {
       onSuccess: () => {
         successHandler();
-        setNewComment(null);
       },
     });
   };
@@ -55,18 +54,20 @@ const Comments = ({ videoId, comments, refetch }: CommentProps) => {
     <div className="my-8 flex flex-col rounded-xl border p-4">
       <div>
         {comments.length > 0
-          ? `${comments.length} comments`
+          ? newComment === null
+            ? `${comments.length} comments`
+            : `${comments.length + 1} comments`
           : "Be the 1st to comment"}
       </div>
       <div className="my-4 ">
         {sessionData ? (
           <InputBox
             addHandler={addComment}
-            refetch={refetch}
+            refetch={() => refetch().then(() => setNewComment(null))}
             placeholderText="Comment"
           />
         ) : (
-          <Button className="px-8" onClick={void signIn}>
+          <Button className="px-8" onClick={() => void signIn()}>
             Log in to Comment
           </Button>
         )}
