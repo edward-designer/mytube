@@ -4,6 +4,11 @@
 
 import { z } from "zod";
 import { EngagementType } from "@prisma/client";
+import { type User, type Video } from "@prisma/client";
+
+interface VideoWithUser extends Video {
+  user: User;
+}
 
 import {
   createTRPCRouter,
@@ -261,12 +266,14 @@ export const videoRouter = createTRPCRouter({
   getRandomVideos: publicProcedure
     .input(
       z.object({
-        count: z.number(),
+        count: z.number().optional(),
         excludeId: z.string().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const videosWithUser = await ctx.db.video.findMany({
+      let count = 30;
+      if (input.count) count = input.count;
+      /*     const videosWithUser = await ctx.db.video.findMany({
         where: {
           publish: true,
           NOT: {
@@ -276,7 +283,11 @@ export const videoRouter = createTRPCRouter({
         include: {
           user: true,
         },
-      });
+      }); */
+
+      const videosWithUser: VideoWithUser[] = await ctx.db.$queryRawUnsafe(
+        `SELECT Video.*, JSON_OBJECT("handle", User.handle, "name", User.name, "id",User.id , "image", User.image) as user FROM Video LEFT JOIN User ON Video.userId = User.id ORDER BY RAND() LIMIT 30`,
+      );
 
       const videos = videosWithUser.map(({ user, ...video }) => video);
       const users = videosWithUser.map(({ user }) => user);
@@ -288,7 +299,6 @@ export const videoRouter = createTRPCRouter({
               videoId: video.id,
               engagementType: EngagementType.VIEW,
             },
-            take: input.count,
           });
           return {
             ...video,
@@ -297,7 +307,7 @@ export const videoRouter = createTRPCRouter({
         }),
       );
 
-      const indices = Array.from({ length: input.count }, (_, i) => i);
+      const indices = Array.from({ length: count }, (_, i) => i);
 
       for (let i = indices.length - 1; i > 0; i--) {
         if (indices[i] !== undefined) {

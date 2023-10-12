@@ -101,7 +101,7 @@ const VideoGrid = ({
 export default VideoGrid;
 
 const SkeletonVideoCard = () => (
-  <div className="flex flex-1 flex-col items-start hover:bg-gray-100 lg:basis-1/4">
+  <div className="flex flex-1 flex-col items-start lg:basis-1/4">
     <div className="relative w-full">
       <div className="w-full">
         <div className="relative inset-0 h-0 w-full animate-pulse rounded-xl  bg-slate-200 pb-[50%]"></div>
