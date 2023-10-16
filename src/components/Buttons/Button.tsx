@@ -33,7 +33,7 @@ const Button = ({
 
   const variantClasses = {
     primary:
-      "rounded-full bg-primary-600 text-white focus:ring-4 hover:bg-primary-700 shadow-sm focus:ring-primary-100 focus-visible:outline-4 focus-visible:outline-primary-100 focus-visible:outline-offset-4",
+      "rounded-full bg-primary-700 text-white focus:ring-4 hover:bg-primary-700 shadow-sm focus:ring-primary-200 focus-visible:outline-4 focus-visible:outline-primary-100 focus-visible:outline-offset-4",
     "secondary-gray":
       "flex items-center justify-center disabled:opacity-30 rounded-full bg-gray-100 text-gray-500 focus:ring-4 shadow-sm ring-1 ring-inset focus:ring-gray-100  focus-visible:outline-4 focus-visible:outline-gray-100 focus-visible:outline-offset-4 ring-gray-200 hover:text-gray-800 hover:bg-gray-50",
     "secondary-white":

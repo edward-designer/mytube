@@ -11,11 +11,9 @@ import LoadingMessage from "@/components/Loading/Loading";
 import useImageUpload, { type VideoData } from "@/hook/useImageUpload";
 import LikeButton from "@/components/Buttons/LikeButton";
 import UserCard from "@/components/Video/UserCard";
-import {
-  VideoTitle,
-  VideoInfo,
-  VideoDescription,
-} from "@/components/Video/VideoGrid";
+import { VideoDescription } from "@/components/Video/VideoDescription";
+import { VideoInfo } from "@/components/Video/VideoInfo";
+import { VideoTitle } from "@/components/Video/VideoTitle";
 import ReactPlayer from "react-player";
 import PublishedButton from "@/components/Buttons/PublishedButton";
 

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import UserImage from "./UserImage";
-import { UserName } from "./VideoGrid";
+import { UserName } from "./UserName";
 
 interface UserCardProps {
   userId: string;

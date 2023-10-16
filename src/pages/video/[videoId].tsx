@@ -10,11 +10,9 @@ import { api } from "@/utils/api";
 import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import LoadingMessage from "@/components/Loading/Loading";
 import RecommendedVideos from "@/components/Video/RecommendedVideos";
-import {
-  VideoDescription,
-  VideoInfo,
-  VideoTitle,
-} from "@/components/Video/VideoGrid";
+import { VideoDescription } from "@/components/Video/VideoDescription";
+import { VideoInfo } from "@/components/Video/VideoInfo";
+import { VideoTitle } from "@/components/Video/VideoTitle";
 import { assertString } from "@/utils/helpers";
 import FollowButton from "@/components/Buttons/FolllowButton";
 import LikeButton from "@/components/Buttons/LikeButton";

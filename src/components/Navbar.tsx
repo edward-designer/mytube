@@ -80,9 +80,15 @@ const HeaderMenu = () => {
             className="flex rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
             {sessionData ? (
-              <UserImage image={sessionData?.user.image ?? ""} />
+              <>
+                <UserImage image={sessionData?.user.image ?? ""} />
+                <span className="sr-only">Open Menu</span>
+              </>
             ) : (
-              <DotsVertical className="w-5 stroke-gray-700" />
+              <>
+                <DotsVertical className="w-5 stroke-gray-700" />
+                <span className="sr-only">Open Menu</span>
+              </>
             )}
           </Menu.Button>
         </div>
@@ -101,6 +107,7 @@ const HeaderMenu = () => {
                 <UserImage
                   image={sessionData?.user?.image ?? ""}
                   className="aspect-square"
+                  priority={true}
                 />
                 <div className="ml-2 flex w-full flex-col justify-center truncate">
                   {sessionData?.user?.name && (

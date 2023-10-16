@@ -313,7 +313,9 @@ const NavItem = ({
           : item.icon(
               "m-1 h-5 w-5 shrink-0 stroke-gray-500  group-hover:stroke-primary-600",
             )}
-        <p className={cx([expandSideBar ? "" : "hidden", "whitespace-nowrap"])}>
+        <p
+          className={cx([expandSideBar ? "" : "sr-only", "whitespace-nowrap"])}
+        >
           {item.name}
         </p>
       </Link>
