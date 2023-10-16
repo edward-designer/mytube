@@ -42,6 +42,7 @@ export const VideoCard = ({
           <Thumbnail
             priority={variant !== "aside" && priority}
             thumbnailUrl={video.thumbnailUrl ?? ""}
+            description={`Thumbnail image for the video ${video.title ?? ""}`}
           />
         </div>
         <div

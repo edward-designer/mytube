@@ -6,9 +6,12 @@ import VideoGrid from "@/components/Video/VideoGrid";
 
 const Home: NextPage = () => {
   const { data, isLoading, isFetching, error } =
-    api.video.getRandomVideos.useQuery({
-      count: 30,
-    });
+    api.video.getRandomVideos.useQuery(
+      {
+        count: 30,
+      },
+      { refetchOnWindowFocus: false },
+    );
 
   const Message = () => {
     if (!data)

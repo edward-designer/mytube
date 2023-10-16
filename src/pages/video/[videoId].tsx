@@ -8,7 +8,6 @@ import ReactPlayer from "react-player";
 
 import { api } from "@/utils/api";
 import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
-import LoadingMessage from "@/components/Loading/Loading";
 import RecommendedVideos from "@/components/Video/RecommendedVideos";
 import { VideoDescription } from "@/components/Video/VideoDescription";
 import { VideoInfo } from "@/components/Video/VideoInfo";
@@ -99,6 +98,7 @@ const VideoPage: NextPage = () => {
             style={{ borderRadius: "1em", overflow: "hidden" }}
             width="100%"
             height="auto"
+            muted={true}
           />
           <div className="mt-4 flex space-x-3 rounded-2xl border border-gray-200 p-4 shadow-sm">
             <div className="min-w-0 flex-1 space-y-3 ">
