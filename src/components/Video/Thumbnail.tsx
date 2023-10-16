@@ -12,8 +12,8 @@ export function Thumbnail({
       <Image
         src={thumbnailUrl || "/background.jpg"}
         alt="Alternative"
-        width="400"
-        height="200"
+        sizes="(max-width: 767px) 90vw, (max-width: 1023px) 40vw, (max-width: 1035px) 30vw, 23vw"
+        fill
         className="absolute inset-0 left-0 top-0 h-full w-full rounded-2xl object-cover"
         priority={priority}
       />
