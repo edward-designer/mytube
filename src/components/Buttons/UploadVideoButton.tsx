@@ -6,6 +6,7 @@ import { Plus, Upload } from "../Icons/Icons";
 import { type VideoData } from "@/hook/useImageUpload";
 import LoadingMessage from "../Loading/Loading";
 import { useRouter } from "next/router";
+import { checkFileFormat, checkFileSize } from "@/utils/helpers";
 
 interface UploadVideoButtonProps {
   refetch: () => Promise<unknown>;
@@ -53,10 +54,17 @@ const UploadVideoButton = ({ refetch }: UploadVideoButtonProps) => {
 
   const uploadVideo = async (video: File) => {
     const data = new FormData();
+
     data.append("file", video);
     data.append("upload_preset", "mytube");
     data.append("cloud_name", "deh6cggus");
     try {
+      if (!checkFileSize(video))
+        throw new Error("Sorry, please upload a video less than 100M.");
+      if (!checkFileFormat(video))
+        throw new Error(
+          "Sorry, please upload a video file (e.g. .mp4, .mov, .avi)",
+        );
       const response = await fetch(
         "https://api.cloudinary.com/v1_1/deh6cggus/video/upload",
         {
@@ -67,9 +75,9 @@ const UploadVideoButton = ({ refetch }: UploadVideoButtonProps) => {
       const json = (await response.json()) as { secure_url: string };
       return json.secure_url;
     } catch (err) {
+      setIsUploading(false);
       throw err;
     }
-    return "";
   };
 
   return (
@@ -125,13 +133,13 @@ const UploadVideoButton = ({ refetch }: UploadVideoButtonProps) => {
                         />
                         Upload Video
                       </Dialog.Title>
-                      {isUploading ? (
-                        <div className="flex h-[200px] content-center justify-center">
-                          <LoadingMessage height={100} width={100} />
-                        </div>
-                      ) : error ? (
-                        <div className="flex h-[200px] content-center justify-center">
+                      {error ? (
+                        <div className="flex h-[200px] items-center justify-center">
                           {error}
+                        </div>
+                      ) : isUploading ? (
+                        <div className="flex h-[200px] items-center justify-center">
+                          <LoadingMessage height={100} width={100} />
                         </div>
                       ) : (
                         <div
@@ -174,11 +182,14 @@ const UploadVideoButton = ({ refetch }: UploadVideoButtonProps) => {
                     </div>
                   </div>
                   <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                    {!isUploading && !error && (
+                    {!isUploading && (
                       <button
                         type="button"
                         className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                        onClick={() => setUploadScreen(false)}
+                        onClick={() => {
+                          setError("");
+                          setUploadScreen(false);
+                        }}
                         ref={cancelButtonRef}
                       >
                         Cancel

@@ -38,6 +38,7 @@ const useImageUpload = ({
   initialFile: string;
   aspectRatio?: number;
 }) => {
+  const [error, setError] = useState("");
   const userDataMutation = api.user.updateProfile.useMutation();
   const videoDataMutation = api.video.updateVideoById.useMutation();
 
@@ -75,10 +76,16 @@ const useImageUpload = ({
     const data = cropper?.getCroppedCanvas().toDataURL("image/jpg") ?? "";
     setOrgImage("");
     const url = await uploadImage(data);
-    handleImageUpdate(url, () => {
-      setOrgImage(url);
-      void preloadImage(url);
-    });
+    if (url)
+      handleImageUpdate(url, () => {
+        setOrgImage(url);
+        void preloadImage(url);
+      });
+    else {
+      setOrgImage(initialFile);
+      setIsUploading(false);
+      void refetch();
+    }
   };
 
   const onCancel = () => {
@@ -103,6 +110,8 @@ const useImageUpload = ({
     data.append("upload_preset", "mytube");
     data.append("cloud_name", "deh6cggus");
     try {
+      if (new Blob([image]).size > 10485760)
+        throw new Error("Sorry, please upload an image less than 10M.");
       const response = await fetch(
         "https://api.cloudinary.com/v1_1/deh6cggus/image/upload",
         {
@@ -113,9 +122,10 @@ const useImageUpload = ({
       const json = (await response.json()) as { secure_url: string };
       return json.secure_url;
     } catch (err) {
-      console.log(err);
+      let message = "Sorry, something went wrong.";
+      if (err instanceof Error) message = err.message;
+      setError(message);
     }
-    return "";
   };
 
   const uploadHandler = (file: File | undefined) => {
@@ -132,35 +142,46 @@ const useImageUpload = ({
   );
 
   const CropCard = () =>
-    useCrop && (
-      <>
-        <div className="fixed inset-0 z-40 h-full w-full bg-black/70 " />
-        <div className="fixed left-0 top-0 z-50 ml-[50%] mt-6 -translate-x-[50%] bg-white/90 p-[3vw] shadow-lg">
-          <Cropper
-            src={
-              uploadFile instanceof File
-                ? URL.createObjectURL(uploadFile)
-                : uploadFile
-            }
-            aspectRatio={aspectRatio}
-            guides={true}
-            ref={cropperRef}
-            style={{ width: "70vw", height: "70vh" }}
-          />
-          <div className="mt-4 flex gap-2">
-            <Button className="rounded-lg" onClick={() => void onCrop()}>
-              Crop
-            </Button>
-            <Button
-              className="rounded-lg"
-              variant="secondary-gray"
-              onClick={onCancel}
-            >
-              Cancel
-            </Button>
-          </div>
+    error ? (
+      <div className="absolute inset-0 z-50 bg-black/40 backdrop-blur-sm">
+        <div className="fixed left-1/2 top-1/2 z-50 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center border bg-white p-8 shadow-md">
+          <div>{error}</div>
+          <Button className="mt-4 rounded-md" onClick={() => setError("")}>
+            Cancel
+          </Button>
         </div>
-      </>
+      </div>
+    ) : (
+      useCrop && (
+        <>
+          <div className="fixed inset-0 z-40 h-full w-full bg-black/70 " />
+          <div className="fixed left-0 top-0 z-50 ml-[50%] mt-6 -translate-x-[50%] bg-white/90 p-[3vw] shadow-lg">
+            <Cropper
+              src={
+                uploadFile instanceof File
+                  ? URL.createObjectURL(uploadFile)
+                  : uploadFile
+              }
+              aspectRatio={aspectRatio}
+              guides={true}
+              ref={cropperRef}
+              style={{ width: "70vw", height: "70vh" }}
+            />
+            <div className="mt-4 flex gap-2">
+              <Button className="rounded-lg" onClick={() => void onCrop()}>
+                Crop
+              </Button>
+              <Button
+                className="rounded-lg"
+                variant="secondary-gray"
+                onClick={onCancel}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </>
+      )
     );
   const image = { UploadButton, CropCard, orgImage, isUploading };
   return [image];
