@@ -18,24 +18,29 @@ Online platform used:
 
 This app is based on the [tutorial by Jerome McCree](https://www.vidchill.org/) with lots of customizations and enhancements:
 
+- **UX of homepage**
+  - infinite scrolling for videos (via useInfiniteQuery and Intersection Observer)
 - **UX of image/video upload / update**
-  -- steps of video upload
-  -- use of auto-generated video thumbnail
-  -- debounced auto save of video meta data
-  -- image upload hook
-  -- error handling
-  -- skeleton loading
+  - steps of video upload
+  - use of auto-generated video thumbnail
+  - debounced auto save of video meta data
+  - image upload hook
+  - error handling
+  - skeleton loading
 - **UX of user input**
-  -- partial hiding of long video descriptions
-  -- auto expansion of textarea height based on input length
-  -- _optimistic update_ for commenting
+  - partial hiding of long video descriptions
+  - auto expansion of textarea height based on input length
+  - _optimistic update_ for commenting
 - **Visual design**
-  -- auto minimize of sidebar
-  -- animated like/dislike icons
-  -- responsive layout
-  -- History and Liked pages
+  - auto minimize of sidebar
+  - animated like/dislike icons
+  - responsive layout
+  - History and Liked pages
 - **Security**
-  -- userId is got directly from db rather than supplying through API payload
+  - userId is got directly from db rather than supplying through API payload
+- **SEO**
+  - optimised response image delivery with priority fetching for above the fold images
+  - title tags
 
 ## Features of the myTube App
 
