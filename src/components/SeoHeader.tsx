@@ -18,10 +18,7 @@ export const SeoHeaders = ({
   imageUrl: string;
 }) => {
   return (
-    <Head>
-      <title>{title}</title>
-      {url && <link rel="canonical" href={url} />}
-      <meta name="description" content={description} />
+    <>
       <meta name="author" content={author} />
       <meta name="robots" content="index,follow" />
       <meta property="og:title" content={title} />
@@ -36,6 +33,6 @@ export const SeoHeaders = ({
       <meta name="twitter:title" content={title} />
       <meta name="twitter:image" content={imageUrl} />
       <meta name="twitter:description" content={description} />
-    </Head>
+    </>
   );
 };
