@@ -3,15 +3,37 @@ import { type NextPage } from "next";
 import { api } from "@/utils/api";
 import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import VideoGrid from "@/components/Video/VideoGrid";
+import { Fragment, useEffect, useRef } from "react";
 
 const Home: NextPage = () => {
-  const { data, isLoading, isFetching, error } =
-    api.video.getRandomVideos.useQuery(
+  const intersectionRef = useRef(null);
+  const { data, isLoading, error, fetchNextPage, hasNextPage } =
+    api.video.getRandomVideos.useInfiniteQuery(
       {
-        count: 30,
+        limit: 10,
       },
-      { refetchOnWindowFocus: false },
+      {
+        refetchOnWindowFocus: false,
+        getNextPageParam: (lastPage) => {
+          if (lastPage.videos.length < 10) return;
+          return lastPage.nextCursor;
+        },
+        initialCursor: 1,
+      },
     );
+  console.log(hasNextPage);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries: IntersectionObserverEntry[]) => {
+        if (entries[0]?.isIntersecting) void fetchNextPage();
+      },
+      { threshold: 1.0 },
+    );
+    if (intersectionRef.current) {
+      observer.observe(intersectionRef.current);
+    }
+    return () => observer.disconnect();
+  }, []);
 
   const Message = () => {
     if (!data)
@@ -32,14 +54,28 @@ const Home: NextPage = () => {
       );
   };
 
-  return isLoading || isFetching ? (
-    <VideoGrid isLoading={isLoading || isFetching} />
-  ) : data?.videos && data?.users ? (
-    <VideoGrid data={data} />
-  ) : (
-    <div className="flex h-full w-full items-center justify-center">
-      <Message />
-    </div>
+  return (
+    <>
+      {isLoading ? (
+        <VideoGrid isLoading={isLoading} />
+      ) : data?.pageParams ? (
+        <div className="grid w-full grid-cols-1 content-start gap-8 gap-y-6 p-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-y-12 lg:p-12 2xl:grid-cols-4">
+          {data.pages.map((p) => (
+            <Fragment key={`${p.nextCursor}`}>
+              {<VideoGrid cardsOnly={true} data={p} />}
+            </Fragment>
+          ))}
+        </div>
+      ) : (
+        <div className="flex h-full w-full items-center justify-center">
+          <Message />
+        </div>
+      )}
+      <div
+        ref={intersectionRef}
+        className={`${hasNextPage ? "" : "hidden"} mb-1 h-20 w-full`}
+      />
+    </>
   );
 };
 

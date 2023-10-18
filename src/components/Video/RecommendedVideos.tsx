@@ -2,7 +2,6 @@ import { api } from "@/utils/api";
 import { useEffect } from "react";
 import VideoGrid from "./VideoGrid";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import LoadingMessage from "../Loading/Loading";
 import { useRouter } from "next/router";
 import { assertString } from "@/utils/helpers";
 import { AsidePlaceholder } from "../Loading/VideoLoadingPlaceholder";
@@ -14,7 +13,7 @@ const RecommendedVideos = () => {
 
   const { data, isLoading, isFetching, error, refetch } =
     api.video.getRandomVideos.useQuery(
-      { count: 12, excludeId: videoId },
+      { limit: 12, excludeId: videoId, cursor: 1 },
       {
         enabled: false,
       },

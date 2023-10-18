@@ -266,27 +266,19 @@ export const videoRouter = createTRPCRouter({
   getRandomVideos: publicProcedure
     .input(
       z.object({
-        count: z.number().optional(),
+        limit: z.number().optional(),
+        cursor: z.number(),
         excludeId: z.string().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      let count = 30;
-      if (input.count) count = input.count;
-      /*     const videosWithUser = await ctx.db.video.findMany({
-        where: {
-          publish: true,
-          NOT: {
-            id: input.excludeId,
-          },
-        },
-        include: {
-          user: true,
-        },
-      }); */
+      let limit = 10;
+      if (input.limit && input.limit > 0) limit = input.limit;
+      let offset = 1;
+      if (input.cursor) offset = (input.cursor - 1) * limit;
 
       const videosWithUser: VideoWithUser[] = await ctx.db.$queryRawUnsafe(
-        `SELECT Video.*, JSON_OBJECT("handle", User.handle, "name", User.name, "id",User.id , "image", User.image) as user FROM Video LEFT JOIN User ON Video.userId = User.id ORDER BY RAND() LIMIT 30`,
+        `SELECT Video.*, JSON_OBJECT("handle", User.handle, "name", User.name, "id",User.id , "image", User.image) as user FROM Video LEFT JOIN User ON Video.userId = User.id ORDER BY Video.createdAt DESC LIMIT ${limit} OFFSET ${offset}`,
       );
 
       const videos = videosWithUser.map(({ user, ...video }) => video);
@@ -307,23 +299,7 @@ export const videoRouter = createTRPCRouter({
         }),
       );
 
-      const indices = Array.from({ length: count }, (_, i) => i);
-
-      for (let i = indices.length - 1; i > 0; i--) {
-        if (indices[i] !== undefined) {
-          const j = Math.floor(Math.random() * (i + 1));
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          [indices[i], indices[j]] = [indices[j], indices[i]];
-        }
-      }
-
-      const shuffledVideosWithCounts = indices.map((i) => videosWithCounts[i]);
-      const shuffledUsers = indices.map((i) => users[i]);
-
-      const randomVideos = shuffledVideosWithCounts.slice(0, input.count);
-      const randomUsers = shuffledUsers.slice(0, input.count);
-      return { videos: randomVideos, users: randomUsers };
+      return { videos: videosWithCounts, users, nextCursor: input.cursor + 1 };
     }),
 
   getVideosByUploader: publicProcedure

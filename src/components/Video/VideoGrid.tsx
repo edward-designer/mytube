@@ -33,12 +33,14 @@ interface VideoGridProps {
   };
   variant?: string;
   isLoading?: boolean;
+  cardsOnly?: boolean;
 }
 
 const VideoGrid = ({
   data,
   variant = "home",
   isLoading = false,
+  cardsOnly = false,
 }: VideoGridProps) => {
   if (isLoading) {
     return (
@@ -62,7 +64,7 @@ const VideoGrid = ({
   if (data) {
     const { videos, users } = data;
     const videosToShow = videos.filter((video) => Boolean);
-    return (
+    return !cardsOnly ? (
       <div
         className={cx([
           "w-full content-start gap-8",
@@ -83,13 +85,31 @@ const VideoGrid = ({
               video={video}
               user={user}
               variant={variant}
-              priority={index<=9}
+              priority={index <= 9}
             />
           );
         })}
         {/* hack to prevent the last odd element to grow to full width */}
         {videosToShow.length % 2 !== 0 && <i className="h-0 grow-[100000]" />}
       </div>
+    ) : (
+      <>
+        {videosToShow.map((video, index) => {
+          const user = users[index];
+          if (video === undefined || user === undefined) return;
+          return (
+            <VideoCard
+              key={video.id}
+              video={video}
+              user={user}
+              variant={variant}
+              priority={index <= 9}
+            />
+          );
+        })}
+        {/* hack to prevent the last odd element to grow to full width */}
+        {videosToShow.length % 2 !== 0 && <i className="h-0 grow-[100000]" />}
+      </>
     );
   }
 };
