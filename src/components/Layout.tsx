@@ -4,11 +4,11 @@ import Head from "next/head";
 import { Navbar, Sidebar } from "@/components";
 import Menu from "./Icons/Menu";
 import Footer from "./Footer";
+import { SeoHeaders } from "./SeoHeader";
 
 const Layout = ({ children }: { children: ReactElement }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [expandSideBar, setExpandSideBar] = useState(false);
-  const setSidebarOpen = () => setIsOpen(true);
   const closeSidebar = useCallback(() => setIsOpen(false), []);
 
   return (
@@ -18,6 +18,15 @@ const Layout = ({ children }: { children: ReactElement }) => {
         <meta name="description" content="A Youtube Clone" />
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <SeoHeaders
+          title="MyTube UK"
+          description="A Youtube Clone"
+          author="Edward Chung"
+          twitterAuthor=""
+          twitterSite=""
+          url="https://mytubeuk.vercel.app/"
+          imageUrl="https://mytubeuk.vercel.app/mytube.jpg"
+        />
       </Head>
       <main className="relative flex min-h-[100dvh] max-w-[100dvw] flex-col">
         <Navbar>
