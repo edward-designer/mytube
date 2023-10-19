@@ -72,7 +72,7 @@ const Home: NextPage = () => {
                 <VideoGrid
                   cardsOnly={true}
                   data={p}
-                  refocus={index === data.pages.length - 1}
+                  refocus={index === data.pages.length - 1 && index !== 0}
                 />
               }
             </Fragment>
