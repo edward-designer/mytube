@@ -6,18 +6,30 @@ import { VideoInfo } from "./VideoInfo";
 import UserImage from "./UserImage";
 import { UserName } from "./UserName";
 import { Video, User } from "./VideoGrid";
+import { useEffect, useRef } from "react";
 
 export const VideoCard = ({
   video,
   user,
   variant,
   priority,
+  refocus = false,
 }: {
   video: Video;
   user: User;
   variant: string;
   priority?: boolean;
+  refocus?: boolean;
 }) => {
+  const focusRef = useRef<null | HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    if (refocus && focusRef.current) {
+      focusRef.current.focus();
+      console.log("focus");
+    }
+  }, [refocus]);
+
   return (
     <Link
       href={`/video/${video.id}`}
@@ -27,6 +39,7 @@ export const VideoCard = ({
         variant === "aside" ? "flex-1 basis-1/2" : "",
       ])}
       key={video.id}
+      ref={focusRef}
     >
       <div
         className={cx([

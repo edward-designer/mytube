@@ -34,6 +34,7 @@ interface VideoGridProps {
   variant?: string;
   isLoading?: boolean;
   cardsOnly?: boolean;
+  refocus?: boolean;
 }
 
 const VideoGrid = ({
@@ -41,10 +42,12 @@ const VideoGrid = ({
   variant = "home",
   isLoading = false,
   cardsOnly = false,
+  refocus = false,
 }: VideoGridProps) => {
   if (isLoading) {
     return (
       <div
+        aria-label="A list of recommended videos"
         className={cx([
           "w-full content-start gap-8",
           variant === "aside"
@@ -99,6 +102,7 @@ const VideoGrid = ({
           if (video === undefined || user === undefined) return;
           return (
             <VideoCard
+              refocus={refocus && index === 0}
               key={video.id}
               video={video}
               user={user}

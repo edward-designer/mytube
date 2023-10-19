@@ -4,6 +4,7 @@ import { api } from "@/utils/api";
 import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import VideoGrid from "@/components/Video/VideoGrid";
 import { Fragment, useEffect, useRef } from "react";
+import { Button } from "@/components";
 
 const Home: NextPage = () => {
   const intersectionRef = useRef(null);
@@ -21,7 +22,7 @@ const Home: NextPage = () => {
         initialCursor: 1,
       },
     );
-  console.log(hasNextPage);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries: IntersectionObserverEntry[]) => {
@@ -59,10 +60,21 @@ const Home: NextPage = () => {
       {isLoading ? (
         <VideoGrid isLoading={isLoading} />
       ) : data?.pageParams ? (
-        <div className="grid w-full grid-cols-1 content-start gap-8 gap-y-6 p-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-y-12 lg:p-12 2xl:grid-cols-4">
-          {data.pages.map((p) => (
+        <div
+          role="feed"
+          aria-live="assertive"
+          aria-label="A list of recommended videos"
+          className="grid w-full grid-cols-1 content-start gap-8 gap-y-6 p-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-y-12 lg:p-12 2xl:grid-cols-4"
+        >
+          {data.pages.map((p, index) => (
             <Fragment key={`${p.nextCursor}`}>
-              {<VideoGrid cardsOnly={true} data={p} />}
+              {
+                <VideoGrid
+                  cardsOnly={true}
+                  data={p}
+                  refocus={index === data.pages.length - 1}
+                />
+              }
             </Fragment>
           ))}
         </div>
@@ -74,7 +86,17 @@ const Home: NextPage = () => {
       <div
         ref={intersectionRef}
         className={`${hasNextPage ? "" : "hidden"} mb-1 h-20 w-full`}
-      />
+      >
+        <Button
+          variant="primary"
+          className="sr-only"
+          onClick={() => {
+            void fetchNextPage();
+          }}
+        >
+          Load more
+        </Button>
+      </div>
     </>
   );
 };
