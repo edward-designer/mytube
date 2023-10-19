@@ -26,7 +26,6 @@ export const VideoCard = ({
   useEffect(() => {
     if (refocus && focusRef.current) {
       focusRef.current.focus();
-      console.log("focus");
     }
   }, [refocus]);
 
